@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_auth/login')({
 function RouteComponent() {
   return (
     <main className="w-full min-h-screen flex flex-col items-center justify-center">
-      <AuthContainer type='login' />
+      <AuthContainer type="login" />
     </main>
   )
 }
