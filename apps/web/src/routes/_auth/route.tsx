@@ -6,6 +6,7 @@ export const Route = createFileRoute('/_auth')({
   beforeLoad: async () => {
     try {
       const session = await getSession()
+      console.log(session);
       if (session) throw redirect({ to: '/' })
     } catch (error) {
       console.log(error)
