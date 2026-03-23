@@ -4,12 +4,14 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 export const Route = createFileRoute('/_auth')({
   component: RouteComponent,
   beforeLoad: async () => {
-    try {
-      const session = await getSession()
-      console.log(session);
-      if (session) throw redirect({ to: '/' })
-    } catch (error) {
-      console.log(error)
+    const session = await getSession()
+    if (session.error) {
+      console.error('Error fetching session:', session.error)
+      return
+    }
+
+    if (session.data) {
+      throw redirect({ to: '/dashboard' })
     }
   },
 })
