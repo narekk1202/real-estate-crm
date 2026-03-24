@@ -65,12 +65,7 @@ function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-1">
-          <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary text-xs font-bold text-primary-foreground">
-            RE
-          </div>
-          <span className="truncate font-semibold text-sm group-data-[collapsible=icon]:hidden">
-            Real Estate CRM
-          </span>
+          <img src="/logo.png" alt="Logo" className='w-32 h-auto' />
         </div>
       </SidebarHeader>
 
