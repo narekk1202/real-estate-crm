@@ -15,7 +15,8 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from '#/components/ui/sidebar'
-import { authClient, signOut, useSession } from '#/lib/auth-client'
+import { useSession } from '#/lib/auth-client'
+import { useLogoutMutation } from '#/services/mutations/auth.mutations'
 import { Link, Outlet, useRouterState } from '@tanstack/react-router'
 import {
   Building2,
@@ -57,6 +58,7 @@ function NavItem({ to, label, icon: Icon, exact }: (typeof navItems)[number]) {
 
 function AppSidebar() {
   const { data: session } = useSession()
+  const logoutMutation = useLogoutMutation()
   const user = session?.user
 
   return (
@@ -112,9 +114,9 @@ function AppSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
-              onClick={() => signOut()}
+              onClick={() => logoutMutation.mutate()}
               tooltip="Sign out"
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground cursor-pointer"
             >
               <LogOut />
               <span>Sign out</span>

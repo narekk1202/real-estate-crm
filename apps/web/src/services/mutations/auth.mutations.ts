@@ -1,5 +1,5 @@
 import { MUTATION_KEYS } from '#/constants/request-keys.consts'
-import { signIn, signUp } from '#/lib/auth-client'
+import { signIn, signOut, signUp } from '#/lib/auth-client'
 import type {
   LoginFormValues,
   RegisterFormValues,
@@ -40,6 +40,24 @@ export const useLoginMutation = () => {
 
       toast.success('Login successful!')
       navigate({ to: '/dashboard' })
+    },
+  })
+}
+
+export const useLogoutMutation = () => {
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationKey: [MUTATION_KEYS.LOGOUT],
+    mutationFn: async () => {
+      const response = await signOut()
+      if (response.error) {
+        toast.error(`Logout failed: ${response.error.message}`)
+        return
+      }
+
+      toast.success('Logged out successfully.')
+      navigate({ to: '/login' })
     },
   })
 }
