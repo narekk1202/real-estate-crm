@@ -39,7 +39,7 @@ export const useLoginMutation = () => {
       }
 
       toast.success('Login successful!')
-      navigate({ to: '/' })
+      navigate({ to: '/dashboard' })
     },
   })
 }

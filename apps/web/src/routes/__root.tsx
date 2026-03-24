@@ -1,21 +1,21 @@
+import { Toaster } from '#/components/ui/sonner'
+import { TooltipProvider } from '#/components/ui/tooltip'
+import { TanStackDevtools } from '@tanstack/react-devtools'
 import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-import TanStackQueryProvider from '../integrations/tanstack-query/root-provider'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
+import TanStackQueryProvider from '../integrations/tanstack-query/root-provider'
 import appCss from '../styles.css?url'
-import { Toaster } from "@/components/ui/sonner"
 
 import type { QueryClient } from '@tanstack/react-query'
 
 interface MyRouterContext {
   queryClient: QueryClient
 }
-
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
@@ -50,7 +50,7 @@ function RootDocument({ children }: Readonly<{ children: React.ReactNode }>) {
       <body className="font-sans antialiased wrap-anywhere selection:bg-[rgba(79,184,178,0.24)]">
         <Toaster />
         <TanStackQueryProvider>
-          {children}
+          <TooltipProvider>{children}</TooltipProvider>
           <TanStackDevtools
             config={{
               position: 'bottom-right',

@@ -1,9 +1,19 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { AppShell } from '#/components/layout/app-shell'
+import { getSession } from '#/lib/auth-client'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/dashboard')({
-  component: RouteComponent,
-})
+  beforeLoad: async () => {
+    const session = await getSession()
+    if (session.error) {
+      console.error('Error fetching session:', session.error)
+      return
+    }
 
-function RouteComponent() {
-  return <div>Hello "/dashboard"!</div>
-}
+    console.log(session.data);
+    if (!session.data) {
+      throw redirect({ to: '/login' })
+    }
+  },
+  component: AppShell,
+})
