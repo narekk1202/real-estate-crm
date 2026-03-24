@@ -1,10 +1,10 @@
-import { getSession } from '#/lib/auth-client'
+import { getUserSession } from '#/lib/session'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth')({
   component: RouteComponent,
   beforeLoad: async () => {
-    const session = await getSession()
+    const session = await getUserSession()
     if (session.error) {
       console.error('Error fetching session:', session.error)
       return
