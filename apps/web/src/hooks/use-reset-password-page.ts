@@ -1,8 +1,8 @@
-import { useResetPasswordMutation } from '#/services/mutations/auth.mutations'
+import { useResetPasswordMutation } from '#/services/mutations/auth'
 import {
   resetPasswordValidationSchema,
   type ResetPasswordFormValues,
-} from '#/validations/auth.validations'
+} from '#/validations/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 

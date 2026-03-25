@@ -1,10 +1,10 @@
-import { useLoginMutation } from '#/services/mutations/auth.mutations'
+import { useLoginMutation } from '#/services/mutations/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import {
   loginValidationSchema,
   type LoginFormValues,
-} from './../validations/auth.validations'
+} from '../validations/auth'
 
 export const useLoginPage = () => {
   const loginMutation = useLoginMutation()

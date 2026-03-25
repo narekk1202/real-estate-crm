@@ -1,4 +1,4 @@
-import { useForgotPasswordMutation } from '#/services/mutations/auth.mutations'
+import { useForgotPasswordMutation } from '#/services/mutations/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import z from 'zod'

@@ -1,9 +1,6 @@
-import { MUTATION_KEYS } from '#/constants/request-keys.consts'
+import { MUTATION_KEYS } from '#/constants/request-keys'
 import { authClient, signIn, signOut, signUp } from '#/lib/auth-client'
-import type {
-  LoginFormValues,
-  RegisterFormValues,
-} from '#/validations/auth.validations'
+import type { LoginFormValues, RegisterFormValues } from '#/validations/auth'
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'

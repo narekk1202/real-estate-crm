@@ -18,7 +18,7 @@ import {
 } from '#/components/ui/sidebar'
 import { useSession } from '#/lib/auth-client'
 import { cn } from '#/lib/utils'
-import { useLogoutMutation } from '#/services/mutations/auth.mutations'
+import { useLogoutMutation } from '#/services/mutations/auth'
 import { Link, Outlet, useRouterState } from '@tanstack/react-router'
 import {
   Building2,

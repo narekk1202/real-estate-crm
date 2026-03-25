@@ -1,8 +1,8 @@
-import { useRegisterMutation } from '#/services/mutations/auth.mutations'
+import { useRegisterMutation } from '#/services/mutations/auth'
 import {
   registerValidationSchema,
   type RegisterFormValues,
-} from '#/validations/auth.validations'
+} from '#/validations/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
