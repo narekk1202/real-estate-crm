@@ -10,10 +10,15 @@ const routes = app.get(
 	'/',
 	zValidator('query', z.object({ search: z.string().optional() })),
 	async c => {
-		const user = c.var.user;
-		const { search } = c.req.valid('query');
-		const contacts = await contactsService.getAll(user.id, search);
-		return c.json(contacts);
+		try {
+			const user = c.var.user;
+			const { search } = c.req.valid('query');
+			const contacts = await contactsService.getAll(user.id, search);
+			return c.json(contacts);
+		} catch (error) {
+			console.error('Error fetching contacts:', error);
+			return c.json({ error: 'Failed to fetch contacts' }, 500);
+		}
 	},
 );
 
