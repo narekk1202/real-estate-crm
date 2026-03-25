@@ -14,8 +14,10 @@ import {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
+  useSidebar,
 } from '#/components/ui/sidebar'
 import { useSession } from '#/lib/auth-client'
+import { cn } from '#/lib/utils'
 import { useLogoutMutation } from '#/services/mutations/auth.mutations'
 import { Link, Outlet, useRouterState } from '@tanstack/react-router'
 import {
@@ -57,6 +59,7 @@ function NavItem({ to, label, icon: Icon, exact }: (typeof navItems)[number]) {
 }
 
 function AppSidebar() {
+  const { open } = useSidebar()
   const { data: session } = useSession()
   const logoutMutation = useLogoutMutation()
   const user = session?.user
@@ -64,8 +67,17 @@ function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <div className="flex items-center gap-2 px-2 py-1">
-          <img src="/logo.png" alt="Logo" className='w-32 h-auto' />
+        <div
+          className={cn(
+            'flex items-center gap-2 px-2 py-1',
+            !open && 'px-0 pl-1',
+          )}
+        >
+          <img
+            src={open ? '/logo.png' : '/small-logo.png'}
+            alt="Logo"
+            className={cn('w-32 h-auto', !open && 'w-6')}
+          />
         </div>
       </SidebarHeader>
 
