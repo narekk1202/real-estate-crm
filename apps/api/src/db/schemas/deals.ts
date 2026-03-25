@@ -1,6 +1,7 @@
 import { integer, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { user } from './auth.js';
 import { contacts, properties } from './index.js';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 
 export const dealStage = pgEnum('deal_stage', [
 	'PROSPECT',
@@ -37,3 +38,6 @@ export const deals = pgTable('deals', {
 
 export type Deals = typeof deals.$inferSelect;
 export type NewDeals = typeof deals.$inferInsert;
+
+export const insertDealsSchema = createInsertSchema(deals);
+export const selectDealsSchema = createSelectSchema(deals);

@@ -1,4 +1,5 @@
 import { pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { user } from './index.js';
 
 export const entityType = pgEnum('entity_type', [
@@ -14,7 +15,7 @@ export const type = pgEnum('activity_type', [
 	'TASK',
 ]);
 
-export const activites = pgTable('activites', {
+export const activities = pgTable('activities', {
 	id: text()
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
@@ -32,5 +33,8 @@ export const activites = pgTable('activites', {
 		.$defaultFn(() => new Date()),
 });
 
-export type Activites = typeof activites.$inferSelect;
-export type NewActivites = typeof activites.$inferInsert;
+export type Activities = typeof activities.$inferSelect;
+export type NewActivities = typeof activities.$inferInsert;
+
+export const insertActivitiesSchema = createInsertSchema(activities);
+export const selectActivitiesSchema = createSelectSchema(activities);

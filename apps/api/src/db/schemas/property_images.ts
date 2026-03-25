@@ -1,4 +1,5 @@
 import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { properties } from './index.js';
 
 export const propertyImages = pgTable('property_images', {
@@ -15,3 +16,6 @@ export const propertyImages = pgTable('property_images', {
 
 export type PropertyImages = typeof propertyImages.$inferSelect;
 export type NewPropertyImages = typeof propertyImages.$inferInsert;
+
+export const insertPropertyImagesSchema = createInsertSchema(propertyImages);
+export const selectPropertyImagesSchema = createSelectSchema(propertyImages);
