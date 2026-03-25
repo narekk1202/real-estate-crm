@@ -1,7 +1,7 @@
 import { integer, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { user } from './index.js';
 
-const propertyType = pgEnum('property_type', [
+export const propertyType = pgEnum('property_type', [
 	'APARTMENT',
 	'HOUSE',
 	'COMMERCIAL',
@@ -11,9 +11,9 @@ const propertyType = pgEnum('property_type', [
 	'GARAGE',
 ]);
 
-const listingType = pgEnum('listing_type', ['SALE', 'RENT']);
+export const listingType = pgEnum('listing_type', ['SALE', 'RENT']);
 
-const propertyStatus = pgEnum('property_status', [
+export const propertyStatus = pgEnum('property_status', [
 	'AVAILABLE',
 	'RESERVED',
 	'SOLD',

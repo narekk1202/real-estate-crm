@@ -1,8 +1,8 @@
 import { pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { user } from './index.js';
 
-const entityType = pgEnum('entity_type', ['PROPERTY', 'CONTACT', 'DEAL']);
-const type = pgEnum('activity_type', [
+export const entityType = pgEnum('entity_type', ['PROPERTY', 'CONTACT', 'DEAL']);
+export const type = pgEnum('activity_type', [
 	'CALL',
 	'EMAIL',
 	'MEETING',
