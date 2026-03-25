@@ -12,3 +12,6 @@ export const propertyImages = pgTable('property_images', {
 	order: integer().default(0).notNull(),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+export type PropertyImages = typeof propertyImages.$inferSelect;
+export type NewPropertyImages = typeof propertyImages.$inferInsert;

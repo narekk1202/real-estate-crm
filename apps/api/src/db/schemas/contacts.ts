@@ -36,3 +36,6 @@ export const contacts = pgTable('contacts', {
 		.$onUpdate(() => new Date())
 		.notNull(),
 });
+
+export type Contacts = typeof contacts.$inferSelect;
+export type NewContacts = typeof contacts.$inferInsert;

@@ -46,3 +46,6 @@ export const properties = pgTable('properties', {
 		.$onUpdate(() => new Date())
 		.notNull(),
 });
+
+export type Properties = typeof properties.$inferSelect;
+export type NewProperties = typeof properties.$inferInsert;

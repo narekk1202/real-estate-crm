@@ -34,3 +34,6 @@ export const deals = pgTable('deals', {
 		.$onUpdate(() => new Date())
 		.notNull(),
 });
+
+export type Deals = typeof deals.$inferSelect;
+export type NewDeals = typeof deals.$inferInsert;

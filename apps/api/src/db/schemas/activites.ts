@@ -1,7 +1,11 @@
 import { pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { user } from './index.js';
 
-export const entityType = pgEnum('entity_type', ['PROPERTY', 'CONTACT', 'DEAL']);
+export const entityType = pgEnum('entity_type', [
+	'PROPERTY',
+	'CONTACT',
+	'DEAL',
+]);
 export const type = pgEnum('activity_type', [
 	'CALL',
 	'EMAIL',
@@ -27,3 +31,6 @@ export const activites = pgTable('activites', {
 		.notNull()
 		.$defaultFn(() => new Date()),
 });
+
+export type Activites = typeof activites.$inferSelect;
+export type NewActivites = typeof activites.$inferInsert;
