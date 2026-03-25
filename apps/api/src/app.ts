@@ -16,6 +16,11 @@ app.use(
 	}),
 );
 
+app.onError((err, c) => {
+  console.error(err);
+  return c.json({ error: 'Internal Server Error' }, 500);
+});
+
 app.all('/api/auth/*', c => auth.handler(c.req.raw));
 
 const routes = app.get('/', c => c.text('Hello, World!'));

@@ -1,14 +1,14 @@
 import { pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
-import { user } from './auth.js';
+import { user } from './index.js';
 
-export const contact_type = pgEnum('contact_type', [
+export const contactType = pgEnum('contact_type', [
 	'LEAD',
 	'CLIENT',
 	'AGENT',
 	'LANDLORD',
 ]);
 
-export const contact_status = pgEnum('contact_status', [
+export const contactStatus = pgEnum('contact_status', [
 	'ACTIVE',
 	'INACTIVE',
 	'POTENTIAL',
@@ -26,8 +26,8 @@ export const contacts = pgTable('contacts', {
 	lastName: text('last_name').notNull(),
 	email: text().notNull(),
 	phone: text().notNull(),
-	type: contact_type('type').default('LEAD').notNull(),
-	status: contact_status('status').default('ACTIVE').notNull(),
+	type: contactType('type').default('LEAD').notNull(),
+	status: contactStatus('status').default('ACTIVE').notNull(),
 	source: text('source'),
 	notes: text('notes'),
 	createdAt: timestamp('created_at').defaultNow().notNull(),

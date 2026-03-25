@@ -2,7 +2,7 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { eq } from 'drizzle-orm';
 import { db } from '../db/index.js';
-import * as schema from '../db/schema.js';
+import * as schema from '../db/schemas/index.js';
 import { resetPasswordTemplate } from './email-templates/reset-password.js';
 import { sendEmail } from './send-email.js';
 
