@@ -1,6 +1,7 @@
 import { pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import z from 'zod';
 import { user } from './index.js';
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 
 export const contactType = pgEnum('contact_type', [
 	'LEAD',
@@ -41,5 +42,9 @@ export const contacts = pgTable('contacts', {
 export type Contacts = typeof contacts.$inferSelect;
 export type NewContacts = typeof contacts.$inferInsert;
 
-export const insertContactsSchema = createInsertSchema(contacts);
-export const selectContactsSchema = createSelectSchema(contacts);
+export const insertContactsSchema = createInsertSchema(contacts, {
+	email: z.email(),
+});
+export const selectContactsSchema = createSelectSchema(contacts, {
+	email: z.email(),
+});

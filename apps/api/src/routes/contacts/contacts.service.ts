@@ -1,6 +1,6 @@
 import { and, eq, ilike } from 'drizzle-orm';
 import { db } from '../../db/index.js';
-import { contacts } from '../../db/schemas/contacts.js';
+import { contacts, type NewContacts } from '../../db/schemas/contacts.js';
 
 class ContactsService {
 	async getAll(userId: string, search?: string) {
@@ -15,6 +15,13 @@ class ContactsService {
 						)
 					: eq(contacts.userId, userId),
 			);
+	}
+
+	async create(userId: string, data: NewContacts) {
+		return await db
+			.insert(contacts)
+			.values({ ...data, userId })
+			.returning();
 	}
 }
 
