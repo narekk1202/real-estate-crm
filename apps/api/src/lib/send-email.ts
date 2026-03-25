@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { env } from '../env.js'
 
 type SendEmailOptions = {
 	to: string | string[];
@@ -6,7 +7,7 @@ type SendEmailOptions = {
 	html: string;
 };
 
-const resend = new Resend(process.env.RESEND_API_KEY || '');
+const resend = new Resend(env.RESEND_API_KEY || '');
 
 export const sendEmail = async (options: SendEmailOptions) => {
 	const { data, error } = await resend.emails.send({

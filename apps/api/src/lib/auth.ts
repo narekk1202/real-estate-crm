@@ -3,6 +3,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { eq } from 'drizzle-orm';
 import { db } from '../db/index.js';
 import * as schema from '../db/schemas/index.js';
+import { env } from '../env.js';
 import { resetPasswordTemplate } from './email-templates/reset-password.js';
 import { sendEmail } from './send-email.js';
 
@@ -11,8 +12,8 @@ export const auth = betterAuth({
 		provider: 'pg',
 		schema,
 	}),
-	secret: process.env.BETTER_AUTH_SECRET,
-	trustedOrigins: [process.env.FRONTEND_URL || 'http://localhost:3001'],
+	secret: env.BETTER_AUTH_SECRET,
+	trustedOrigins: [env.FRONTEND_URL || 'http://localhost:3001'],
 	emailAndPassword: {
 		enabled: true,
 		requireEmailVerification: false,
@@ -42,5 +43,5 @@ export const auth = betterAuth({
 			}
 		},
 	},
-	baseURL: process.env.BETTER_AUTH_URL,
+	baseURL: env.BETTER_AUTH_URL,
 });

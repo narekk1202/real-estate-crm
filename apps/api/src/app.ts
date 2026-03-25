@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { auth } from './lib/auth.js';
+import { env } from './env.js'
 
 const app = new Hono();
 
@@ -10,7 +11,7 @@ app.use(logger());
 app.use(
 	'/api/*',
 	cors({
-		origin: process.env.FRONTEND_URL || 'http://localhost:3001',
+		origin: env.FRONTEND_URL || 'http://localhost:3001',
 		allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
 		credentials: true,
 	}),
