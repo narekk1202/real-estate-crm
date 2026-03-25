@@ -81,3 +81,30 @@ export const useForgotPasswordMutation = () => {
     },
   })
 }
+
+export const useResetPasswordMutation = () => {
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationKey: [MUTATION_KEYS.CONFIRM_RESET_PASSWORD],
+    mutationFn: async ({
+      token,
+      password,
+    }: {
+      password: string
+      token: string
+    }) => {
+      const response = await authClient.resetPassword({
+        token,
+        newPassword: password,
+      })
+      if (response.error) {
+        toast.error(`Password reset failed: ${response.error.message}`)
+        return
+      }
+
+      toast.success('Password reset successfully. You can now log in.')
+      navigate({ to: '/login' })
+    },
+  })
+}

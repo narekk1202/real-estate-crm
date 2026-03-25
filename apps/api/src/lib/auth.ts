@@ -25,9 +25,21 @@ export const auth = betterAuth({
 			console.log('Reset password email sent:', { user, url, token });
 		},
 		onPasswordReset: async ({ user }) => {
-			db.update(schema.user)
-				.set({ emailVerified: true })
-				.where(eq(schema.user.id, user.id));
+			try {
+				const result = await db
+					.update(schema.user)
+					.set({ emailVerified: true })
+					.where(eq(schema.user.id, user.id));
+
+				if (result) {
+					console.log('User email verified:', user.id);
+				}
+			} catch (error) {
+				console.error('Error verifying user email:', {
+					userId: user.id,
+					error,
+				});
+			}
 		},
 	},
 	baseURL: process.env.BETTER_AUTH_URL,
