@@ -2,10 +2,11 @@ import 'dotenv/config';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
-import { env } from './env.js';
-import { registerRoutes } from './routes/index.js';
+import { auth } from './lib/auth.js';
+import { env } from './env.js'
 
 const app = new Hono();
+
 app.use(logger());
 app.use(
 	'/api/*',
@@ -15,12 +16,16 @@ app.use(
 		credentials: true,
 	}),
 );
+
 app.onError((err, c) => {
-	console.error(err);
-	return c.json({ error: 'Internal Server Error' }, 500);
+  console.error(err);
+  return c.json({ error: 'Internal Server Error' }, 500);
 });
 
-registerRoutes(app);
+app.all('/api/auth/*', c => auth.handler(c.req.raw));
 
-export type AppType = typeof app;
+const routes = app.get('/', c => c.text('Hello, World!'));
+
+export type AppType = typeof routes;
+
 export default app;
