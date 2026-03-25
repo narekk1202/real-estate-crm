@@ -9,10 +9,13 @@ import {
 } from '#/components/ui/card'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
+import { useForgotPasswordPage } from '#/hooks/use-forgot-password-page'
 import { Link } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 
 const ForgotPasswordContainer = () => {
+  const { form, onSubmit, isPending } = useForgotPasswordPage()
+
   return (
     <section className="w-full h-auto flex flex-col items-center gap-4">
       <img src="/logo.png" alt="Real Estate CRM Logo" className="w-32 h-auto" />
@@ -24,17 +27,30 @@ const ForgotPasswordContainer = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col gap-6">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-6"
+          >
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="m@example.com" />
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                {...form.register('email')}
+              />
+              {form.formState.errors.email && (
+                <p className="text-red-500 text-sm">
+                  {form.formState.errors.email.message}
+                </p>
+              )}
             </div>
-          </div>
+            <Button type="submit" className="w-full" loading={isPending}>
+              Send reset link
+            </Button>
+          </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full">
-            Send reset link
-          </Button>
           <Link to="/login" className="w-full">
             <Button variant="ghost" className="w-full">
               <ArrowLeft className="w-4 h-4 mr-2" />

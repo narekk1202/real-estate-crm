@@ -1,5 +1,5 @@
 import { MUTATION_KEYS } from '#/constants/request-keys.consts'
-import { signIn, signOut, signUp } from '#/lib/auth-client'
+import { authClient, signIn, signOut, signUp } from '#/lib/auth-client'
 import type {
   LoginFormValues,
   RegisterFormValues,
@@ -58,6 +58,26 @@ export const useLogoutMutation = () => {
 
       toast.success('Logged out successfully.')
       navigate({ to: '/login' })
+    },
+  })
+}
+
+export const useForgotPasswordMutation = () => {
+  return useMutation({
+    mutationKey: [MUTATION_KEYS.RESET_PASSWORD],
+    mutationFn: async (email: string) => {
+      const response = await authClient.requestPasswordReset({
+        email,
+        redirectTo: new URL('/reset-password', globalThis.location.origin).href,
+      })
+      if (response.error) {
+        toast.error(`Password reset failed: ${response.error.message}`)
+        return
+      }
+
+      toast.success(
+        'Password reset email sent. If an account with that email exists, you will receive a reset link shortly.',
+      )
     },
   })
 }
