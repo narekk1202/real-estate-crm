@@ -1,3 +1,4 @@
 node_modules
 .turbo
-project-plan.md
+frontend-plan.md
+backend-plan.md
