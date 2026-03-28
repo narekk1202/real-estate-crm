@@ -1,5 +1,5 @@
 import type { GetAllFilters } from '@crm/shared';
-import { and, eq, ilike, or, SQL } from 'drizzle-orm';
+import { and, count, eq, ilike, or, SQL, sql } from 'drizzle-orm';
 import { db } from '../../db/index.js';
 import { contacts, type NewContacts } from '../../db/schemas/contacts.js';
 
@@ -20,10 +20,39 @@ class ContactsService {
 			status && eq(contacts.status, status),
 		].filter(Boolean) as SQL[];
 
-		return await db
-			.select()
-			.from(contacts)
-			.where(and(...conditions));
+		const baseConditions = [
+			eq(contacts.userId, userId),
+			search &&
+				or(
+					ilike(contacts.firstName, `%${search}%`),
+					ilike(contacts.lastName, `%${search}%`),
+					ilike(contacts.email, `%${search}%`),
+					ilike(contacts.phone, `%${search}%`),
+				),
+		].filter(Boolean) as SQL[];
+
+		const [data, stats] = await Promise.all([
+			db
+				.select()
+				.from(contacts)
+				.where(and(...conditions)),
+			db
+				.select({
+					total: count(),
+					active: count(
+						sql`CASE WHEN ${contacts.status} = 'ACTIVE' THEN 1 END`,
+					),
+					leads: count(sql`CASE WHEN ${contacts.type} = 'LEAD' THEN 1 END`),
+					clients: count(sql`CASE WHEN ${contacts.type} = 'CLIENT' THEN 1 END`),
+				})
+				.from(contacts)
+				.where(and(...baseConditions)),
+		]);
+
+		return {
+			data,
+			stats: stats[0],
+		};
 	}
 
 	async create(userId: string, data: NewContacts) {

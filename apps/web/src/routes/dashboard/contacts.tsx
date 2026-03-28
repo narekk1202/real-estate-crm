@@ -11,6 +11,8 @@ import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useDebounce } from 'use-debounce'
 
+const EMPTY_STATS = { total: 0, active: 0, leads: 0, clients: 0 }
+
 export const Route = createFileRoute('/dashboard/contacts')({
   component: RouteComponent,
 })
@@ -20,7 +22,7 @@ function RouteComponent() {
   const [type, setType] = useState<ContactType>()
   const [status, setStatus] = useState<ContactStatus>()
   const [search] = useDebounce(searchText, 300)
-  const { data, isLoading } = useQuery(
+  const { data: contacts, isLoading } = useQuery(
     contactsQueryOptions({ search, type, status }),
   )
 
@@ -44,11 +46,16 @@ function RouteComponent() {
       <Separator />
       <SubHeader
         search={searchText}
+        stats={contacts?.stats || EMPTY_STATS}
         onSearchChange={setSearchText}
         onTypeChange={(type) => setType(type === 'all' ? undefined : type)}
         onStatusChange={(s) => setStatus(s === 'all' ? undefined : s)}
       />
-      <DataTable columns={columns} data={data || []} isLoading={isLoading} />
+      <DataTable
+        columns={columns}
+        data={contacts?.data || []}
+        isLoading={isLoading}
+      />
     </main>
   )
 }

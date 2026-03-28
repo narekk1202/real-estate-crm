@@ -9,3 +9,10 @@ export interface GetAllFilters {
 	type?: ContactType;
 	status?: ContactStatus;
 }
+
+export interface ContactStats {
+	total: number;
+	active: number;
+	leads: number;
+	clients: number;
+}
