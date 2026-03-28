@@ -7,7 +7,8 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "migrate": "drizzle-kit push"
+    "migrate": "drizzle-kit push",
+    "db:seed": "tsx --env-file .env src/db/seed.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.11",
@@ -16,6 +17,7 @@
     "better-auth": "^1.5.5",
     "dotenv": "^17.3.1",
     "drizzle-orm": "^0.45.1",
+    "drizzle-seed": "^0.3.1",
     "drizzle-zod": "^0.8.3",
     "hono": "^4.12.8",
     "pg": "^8.20.0",
