@@ -13,7 +13,7 @@ export const Route = createFileRoute('/dashboard/contacts')({
 })
 
 function RouteComponent() {
-  const { data, isLoading } = useQuery(contactsQueryOptions())
+  const { data, isLoading } = useQuery(contactsQueryOptions({ search: '' }))
 
   return (
     <main className="page-wrap space-y-6">
