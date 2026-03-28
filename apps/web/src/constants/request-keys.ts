@@ -10,4 +10,5 @@ export const MUTATION_KEYS = {
   RESET_PASSWORD: 'reset-password',
   CONFIRM_RESET_PASSWORD: 'confirm-reset-password',
   NEW_CONTACT: 'new-contact',
+  EDIT_CONTACT: 'edit-contact',
 }

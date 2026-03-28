@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Plus } from 'lucide-react'
-import { buttonVariants } from '../ui/button'
+import { Button, buttonVariants } from '../ui/button'
 import ContactForm from './contact-form'
 
 function AddNewContact() {
@@ -30,7 +30,16 @@ function AddNewContact() {
           </DialogDescription>
         </DialogHeader>
 
-        <ContactForm form={form} onSubmit={onSubmit} isPending={isPending} />
+        <ContactForm
+          form={form}
+          onSubmit={onSubmit}
+          isPending={isPending}
+          actionButton={
+            <Button type="submit" size="sm" loading={isPending}>
+              Add Contact
+            </Button>
+          }
+        />
       </DialogContent>
     </Dialog>
   )

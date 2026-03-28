@@ -18,10 +18,11 @@ import { Textarea } from '../ui/textarea'
 interface ContactFormProps {
   isPending: boolean
   form: UseFormReturn<NewContact>
+  actionButton: React.ReactNode
   onSubmit: (data: NewContact) => void | Promise<void>
 }
 
-function ContactForm({ form, onSubmit, isPending }: Readonly<ContactFormProps>) {
+function ContactForm({ form, onSubmit, isPending, actionButton }: Readonly<ContactFormProps>) {
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
@@ -149,9 +150,7 @@ function ContactForm({ form, onSubmit, isPending }: Readonly<ContactFormProps>) 
             Cancel
           </Button>
         </DialogTrigger>
-        <Button type="submit" size="sm" loading={isPending}>
-          Add Contact
-        </Button>
+        {actionButton}
       </div>
     </form>
   )

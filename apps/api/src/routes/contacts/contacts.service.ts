@@ -57,6 +57,16 @@ class ContactsService {
 			.values({ ...data, userId })
 			.returning();
 	}
+
+	async update(userId: string, contactId: string, data: Partial<NewContact>) {
+		const [updatedContact] = await db
+			.update(contacts)
+			.set(data)
+			.where(and(eq(contacts.id, contactId), eq(contacts.userId, userId)))
+			.returning();
+
+		return updatedContact;
+	}
 }
 
 export const contactsService = new ContactsService();

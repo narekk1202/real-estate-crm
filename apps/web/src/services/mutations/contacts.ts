@@ -15,12 +15,40 @@ export const useNewContactMutation = () => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACTS] })
-      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACT_STATS] })
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.CONTACT_STATS],
+      })
       toast.success('Contact created successfully!')
     },
     onError: (error) => {
       console.error('Error creating contact:', error)
       toast.error(`Failed to create contact: ${error.message}`)
+    },
+  })
+}
+
+export const useEditContactMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: [MUTATION_KEYS.EDIT_CONTACT],
+    mutationFn: async ({ id, data }: { id: string; data: NewContact }) => {
+      const response = await client.api.contacts[':id'].$put({
+        json: data,
+        param: { id },
+      })
+      if (!response.ok) throw new Error('Failed to edit contact')
+      return await response.json()
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACTS] })
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.CONTACT_STATS],
+      })
+      toast.success('Contact edited successfully!')
+    },
+    onError: (error) => {
+      console.error('Error editing contact:', error)
+      toast.error(`Failed to edit contact: ${error.message}`)
     },
   })
 }

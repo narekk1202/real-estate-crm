@@ -59,6 +59,18 @@ const routes = app
 			console.error('Error creating contact:', error);
 			return c.json({ error: 'Failed to create contact' }, 500);
 		}
+	})
+	.put('/:id', zValidator('json', insertContactsSchema), async c => {
+		try {
+			const user = c.var.user;
+			const data = c.req.valid('json');
+			const { id } = c.req.param();
+			const updatedContact = await contactsService.update(user.id, id, data);
+			return c.json(updatedContact);
+		} catch (error) {
+			console.error('Error updating contact:', error);
+			return c.json({ error: 'Failed to update contact' }, 500);
+		}
 	});
 
 export default routes;

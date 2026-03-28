@@ -2,11 +2,11 @@ import { Badge } from '#/components/ui/badge'
 import { cn } from '#/lib/utils'
 import type { Contacts } from '@crm/api/src/db/schemas'
 import { type ColumnDef } from '@tanstack/react-table'
-import { Edit, Trash } from 'lucide-react'
+import { ArrowUpDown, Trash } from 'lucide-react'
 import { Button } from '../ui/button'
-import { ArrowUpDown } from "lucide-react"
+import EditContact from './edit-contact'
 
-type SerializedContacts = Omit<Contacts, 'createdAt' | 'updatedAt'> & {
+export type SerializedContacts = Omit<Contacts, 'createdAt' | 'updatedAt'> & {
   createdAt: string
   updatedAt: string
 }
@@ -34,7 +34,7 @@ export const columns: ColumnDef<SerializedContacts>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Created At
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -84,11 +84,9 @@ export const columns: ColumnDef<SerializedContacts>[] = [
   {
     id: 'actions',
     header: 'Actions',
-    cell: () => (
+    cell: ({ row }) => (
       <div className="flex items-center space-x-2">
-        <Button size="icon" variant='secondary'>
-          <Edit />
-        </Button>
+        <EditContact row={row} />
         <Button size="icon" variant="destructive">
           <Trash />
         </Button>
