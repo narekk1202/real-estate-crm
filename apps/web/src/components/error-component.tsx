@@ -16,7 +16,9 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 
   function handleReset() {
     reset?.()
-    router.invalidate()
+    router.invalidate().finally(() => {
+      router.navigate({ to: router.state.location.href, replace: true })
+    })
   }
 
   return (

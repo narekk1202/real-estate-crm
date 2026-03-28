@@ -4,16 +4,25 @@ import { Button } from '#/components/ui/button'
 import { DataTable } from '#/components/ui/data-table'
 import { Separator } from '#/components/ui/separator'
 import { contactsQueryOptions } from '#/services/query-options/contacts'
+import type { ContactStatus, ContactType } from '@crm/shared'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
+import { useState } from 'react'
+import { useDebounce } from 'use-debounce'
 
 export const Route = createFileRoute('/dashboard/contacts')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { data, isLoading } = useQuery(contactsQueryOptions({ search: '' }))
+  const [searchText, setSearchText] = useState('')
+  const [type, setType] = useState<ContactType>()
+  const [status, setStatus] = useState<ContactStatus>()
+  const [search] = useDebounce(searchText, 300)
+  const { data, isLoading } = useQuery(
+    contactsQueryOptions({ search, type, status }),
+  )
 
   return (
     <main className="page-wrap space-y-6">
@@ -33,7 +42,12 @@ function RouteComponent() {
       </div>
 
       <Separator />
-      <SubHeader />
+      <SubHeader
+        search={searchText}
+        onSearchChange={setSearchText}
+        onTypeChange={(type) => setType(type === 'all' ? undefined : type)}
+        onStatusChange={(s) => setStatus(s === 'all' ? undefined : s)}
+      />
       <DataTable columns={columns} data={data || []} isLoading={isLoading} />
     </main>
   )

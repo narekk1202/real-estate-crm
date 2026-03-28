@@ -1,4 +1,9 @@
-import type { ContactStatus, ContactType } from '@crm/shared'
+import {
+  contactStatusValues,
+  contactTypeValues,
+  type ContactStatus,
+  type ContactType,
+} from '@crm/shared'
 import { Search } from 'lucide-react'
 import { Input } from '../ui/input'
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs'
@@ -10,18 +15,22 @@ const STATS = [
   { label: 'Clients', value: '—' },
 ]
 
-const TYPES: ContactType[] = ['AGENT', 'CLIENT', 'LANDLORD', 'LEAD']
-const STATUSES: ContactStatus[] = [
-  'ACTIVE',
-  'INACTIVE',
-  'ARCHIVED',
-  'POTENTIAL',
-]
-
 const capitalize = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 
-function SubHeader() {
+interface SubHeaderProps {
+  search?: string
+  onSearchChange?: (value: string) => void
+  onTypeChange?: (value: ContactType | 'all') => void
+  onStatusChange?: (value: ContactStatus | 'all') => void
+}
+
+function SubHeader({
+  search,
+  onTypeChange,
+  onSearchChange,
+  onStatusChange,
+}: Readonly<SubHeaderProps>) {
   return (
     <section className="flex flex-col gap-5">
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -38,13 +47,21 @@ function SubHeader() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative w-full sm:w-72">
           <Search className="text-muted-foreground absolute top-2.5 left-2.5 size-4" />
-          <Input placeholder="Search contacts..." className="pl-8" />
+          <Input
+            placeholder="Search contacts..."
+            className="pl-8"
+            value={search}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+          />
         </div>
 
-        <Tabs defaultValue="all">
+        <Tabs
+          defaultValue="all"
+          onValueChange={(v) => onTypeChange?.(v as ContactType | 'all')}
+        >
           <TabsList>
             <TabsTrigger value="all">All</TabsTrigger>
-            {TYPES.map((type) => (
+            {contactTypeValues.map((type) => (
               <TabsTrigger key={type} value={type}>
                 {capitalize(type)}
               </TabsTrigger>
@@ -52,10 +69,13 @@ function SubHeader() {
           </TabsList>
         </Tabs>
 
-        <Tabs defaultValue="all">
+        <Tabs
+          defaultValue="all"
+          onValueChange={(v) => onStatusChange?.(v as ContactStatus | 'all')}
+        >
           <TabsList>
             <TabsTrigger value="all">All</TabsTrigger>
-            {STATUSES.map((status) => (
+            {contactStatusValues.map((status) => (
               <TabsTrigger key={status} value={status}>
                 {capitalize(status)}
               </TabsTrigger>
