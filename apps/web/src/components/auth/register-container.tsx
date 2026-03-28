@@ -11,17 +11,10 @@ import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
 import { useRegisterPage } from '#/hooks/use-register-page'
 import { Link } from '@tanstack/react-router'
+import FieldError from '../errors/field-error'
 
 const RegisterContainer = () => {
   const { isPending, form, onSubmit } = useRegisterPage()
-
-  const returnErrorMessage = (field: keyof typeof form.formState.errors) => {
-    return (
-      <div className="text-sm text-red-500 mt-1">
-        {form.formState.errors[field]?.message}
-      </div>
-    )
-  }
 
   return (
     <section className="w-full h-auto flex flex-col items-center gap-4">
@@ -48,7 +41,7 @@ const RegisterContainer = () => {
                   type="text"
                   placeholder="John Doe"
                 />
-                {returnErrorMessage('name')}
+                <FieldError field="name" form={form} />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -58,7 +51,7 @@ const RegisterContainer = () => {
                   type="email"
                   placeholder="m@example.com"
                 />
-                {returnErrorMessage('email')}
+                <FieldError field="email" form={form} />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
@@ -68,7 +61,7 @@ const RegisterContainer = () => {
                   type="password"
                   placeholder="********"
                 />
-                {returnErrorMessage('password')}
+                <FieldError field="password" form={form} />
               </div>
             </div>
             <Button type="submit" className="w-full mt-5" loading={isPending}>

@@ -1,7 +1,7 @@
 import type { GetAllFilters } from '@crm/shared';
 import { and, count, eq, ilike, or, SQL, sql } from 'drizzle-orm';
 import { db } from '../../db/index.js';
-import { contacts, type NewContacts } from '../../db/schemas/contacts.js';
+import { contacts, type NewContact } from '../../db/schemas/contacts.js';
 
 class ContactsService {
 	async getAll(userId: string, filters: GetAllFilters) {
@@ -51,7 +51,7 @@ class ContactsService {
 		return stats;
 	}
 
-	async create(userId: string, data: NewContacts) {
+	async create(userId: string, data: NewContact) {
 		return await db
 			.insert(contacts)
 			.values({ ...data, userId })

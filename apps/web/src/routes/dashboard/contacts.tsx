@@ -1,3 +1,4 @@
+import AddNewContact from '#/components/contacts/add-new-contact'
 import { columns } from '#/components/contacts/columns'
 import SubHeader from '#/components/contacts/sub-header'
 import { Button } from '#/components/ui/button'
@@ -34,12 +35,7 @@ function RouteComponent() {
             Manage your leads, clients, agents, and landlords.
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button size="sm">
-            <Plus className="mr-2 size-4" />
-            New Contact
-          </Button>
-        </div>
+        <AddNewContact />
       </div>
 
       <Separator />

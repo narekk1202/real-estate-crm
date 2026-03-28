@@ -1,7 +1,7 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
 import { getContext } from './integrations/tanstack-query/root-provider'
 import { routeTree } from './routeTree.gen'
-import ErrorComponent from '@/components/error-component'
+import ErrorComponent from '#/components/errors/error-component'
 
 export function getRouter() {
   const router = createTanStackRouter({
