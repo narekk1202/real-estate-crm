@@ -1,3 +1,4 @@
+import { useNewContact } from '#/hooks/use-new-contact'
 import {
   Dialog,
   DialogContent,
@@ -6,11 +7,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { insertContactsSchema, type NewContact } from '@crm/api/src/db/schemas'
 import { contactStatusValues, contactTypeValues } from '@crm/shared'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import FieldError from '../errors/field-error'
 import { Button, buttonVariants } from '../ui/button'
 import { Input } from '../ui/input'
@@ -25,26 +24,10 @@ import {
 import { Textarea } from '../ui/textarea'
 
 function AddNewContact() {
-  const form = useForm<NewContact>({
-    resolver: zodResolver(insertContactsSchema),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      type: 'LEAD',
-      status: 'ACTIVE',
-      source: '',
-      notes: '',
-    },
-  })
-
-  const onSubmit = (data: NewContact) => {
-    console.log(data)
-  }
+  const { form, open, isPending, setOpen, onSubmit } = useNewContact()
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         className={buttonVariants({ variant: 'default', size: 'sm' })}
       >
@@ -185,7 +168,7 @@ function AddNewContact() {
                 Cancel
               </Button>
             </DialogTrigger>
-            <Button type="submit" size="sm">
+            <Button type="submit" size="sm" loading={isPending}>
               Add Contact
             </Button>
           </div>

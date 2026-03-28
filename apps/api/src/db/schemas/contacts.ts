@@ -29,15 +29,19 @@ export const contacts = pgTable('contacts', {
 		.notNull(),
 });
 
-export type Contacts = typeof contacts.$inferSelect;
-export type NewContact = typeof contacts.$inferInsert;
+
 
 export const insertContactsSchema = createInsertSchema(contacts, {
 	firstName: z.string().min(1, 'First name is required'),
 	lastName: z.string().min(1, 'Last name is required'),
 	phone: z.string().min(1, 'Phone number is required'),
 	email: z.email(),
-});
+}).omit({ userId: true });
+
+
 export const selectContactsSchema = createSelectSchema(contacts, {
 	email: z.email(),
 });
+
+export type NewContact = z.infer<typeof insertContactsSchema>;
+export type Contacts = z.infer<typeof selectContactsSchema>;
