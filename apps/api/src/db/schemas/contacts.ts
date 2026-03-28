@@ -29,15 +29,12 @@ export const contacts = pgTable('contacts', {
 		.notNull(),
 });
 
-
-
 export const insertContactsSchema = createInsertSchema(contacts, {
 	firstName: z.string().min(1, 'First name is required'),
 	lastName: z.string().min(1, 'Last name is required'),
-	phone: z.string().min(1, 'Phone number is required'),
+	phone: z.string().regex(/^\+?[1-9]\d{7,14}$/, 'Invalid phone number'),
 	email: z.email(),
 }).omit({ userId: true });
-
 
 export const selectContactsSchema = createSelectSchema(contacts, {
 	email: z.email(),
