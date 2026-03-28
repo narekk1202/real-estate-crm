@@ -24,7 +24,7 @@ app.onError((err, c) => {
 });
 
 app.all('/api/auth/*', c => auth.handler(c.req.raw));
-app.route('/api', routes);
+const router = app.route('/api', routes);
 
-export type AppType = typeof app;
-export default app;
+export type AppType = typeof router;
+export default router;

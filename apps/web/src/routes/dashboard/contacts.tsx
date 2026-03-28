@@ -4,6 +4,8 @@ import { DataTable } from '#/components/ui/data-table'
 import { Input } from '#/components/ui/input'
 import { Separator } from '#/components/ui/separator'
 import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs'
+import { contactsQueryOptions } from '#/services/query-options/contacts'
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { Plus, Search } from 'lucide-react'
 
@@ -19,6 +21,8 @@ const STATS = [
 ]
 
 function RouteComponent() {
+  const { data, isLoading } = useQuery(contactsQueryOptions())
+
   return (
     <main className="page-wrap space-y-6">
       <div className="flex items-start justify-between">
@@ -65,7 +69,7 @@ function RouteComponent() {
         </Tabs>
       </div>
 
-      <DataTable columns={columns} data={[]} />
+      <DataTable columns={columns} data={data || []} isLoading={isLoading} />
     </main>
   )
 }

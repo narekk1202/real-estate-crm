@@ -1,4 +1,6 @@
-export const QUERY_KEYS = {}
+export const QUERY_KEYS = {
+  CONTACTS: 'contacts',
+}
 
 export const MUTATION_KEYS = {
   REGISTER: 'register',
