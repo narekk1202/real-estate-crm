@@ -52,3 +52,28 @@ export const useEditContactMutation = () => {
     },
   })
 }
+
+export const useDeleteContactMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: [MUTATION_KEYS.DELETE_CONTACT],
+    mutationFn: async (id: string) => {
+      const response = await client.api.contacts[':id'].$delete({
+        param: { id },
+      })
+      if (!response.ok) throw new Error('Failed to delete contact')
+      return await response.json()
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACTS] })
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.CONTACT_STATS],
+      })
+      toast.success('Contact deleted successfully!')
+    },
+    onError: (error) => {
+      console.error('Error deleting contact:', error)
+      toast.error(`Failed to delete contact: ${error.message}`)
+    },
+  })
+}

@@ -67,6 +67,15 @@ class ContactsService {
 
 		return updatedContact;
 	}
+
+	async delete(userId: string, contactId: string) {
+		const [deletedContact] = await db
+			.delete(contacts)
+			.where(and(eq(contacts.id, contactId), eq(contacts.userId, userId)))
+			.returning();
+
+		return deletedContact;
+	}
 }
 
 export const contactsService = new ContactsService();

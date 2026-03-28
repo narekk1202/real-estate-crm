@@ -71,6 +71,16 @@ const routes = app
 			console.error('Error updating contact:', error);
 			return c.json({ error: 'Failed to update contact' }, 500);
 		}
+	}).delete('/:id', async c => {
+		try {
+			const user = c.var.user;
+			const { id } = c.req.param();
+			const deletedContact = await contactsService.delete(user.id, id);
+			return c.json(deletedContact);
+		} catch (error) {
+			console.error('Error deleting contact:', error);
+			return c.json({ error: 'Failed to delete contact' }, 500);
+		}
 	});
 
 export default routes;

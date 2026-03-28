@@ -20,7 +20,7 @@ export const deals = pgTable('deals', {
 		.references(() => user.id, { onDelete: 'cascade' }),
 	contactId: text('contact_id')
 		.notNull()
-		.references(() => contacts.id, { onDelete: 'set null' }),
+		.references(() => contacts.id, { onDelete: 'cascade' }),
 	propertyId: text('property_id').references(() => properties.id, {
 		onDelete: 'set null',
 	}),
