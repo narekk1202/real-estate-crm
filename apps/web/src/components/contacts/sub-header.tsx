@@ -1,4 +1,4 @@
-import type { Contacts } from '@crm/api/src/db/schemas'
+import type { ContactStatus, ContactType } from '@crm/shared'
 import { Search } from 'lucide-react'
 import { Input } from '../ui/input'
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs'
@@ -10,8 +10,8 @@ const STATS = [
   { label: 'Clients', value: '—' },
 ]
 
-const TYPES: Contacts['type'][] = ['AGENT', 'CLIENT', 'LANDLORD', 'LEAD']
-const STATUSES: Contacts['status'][] = [
+const TYPES: ContactType[] = ['AGENT', 'CLIENT', 'LANDLORD', 'LEAD']
+const STATUSES: ContactStatus[] = [
   'ACTIVE',
   'INACTIVE',
   'ARCHIVED',
