@@ -23,7 +23,7 @@ function EditContact({ row }: Readonly<EditContactProps>) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
-        className={buttonVariants({ variant: 'default', size: 'icon' })}
+        className={buttonVariants({ variant: 'default', size: 'icon-sm' })}
       >
         <Edit className="size-4" />
       </DialogTrigger>

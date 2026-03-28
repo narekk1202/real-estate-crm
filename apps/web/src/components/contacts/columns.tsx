@@ -87,7 +87,7 @@ export const columns: ColumnDef<SerializedContacts>[] = [
     cell: ({ row }) => (
       <div className="flex items-center space-x-2">
         <EditContact row={row} />
-        <Button size="icon" variant="destructive">
+        <Button size="icon-sm" variant="destructive">
           <Trash />
         </Button>
       </div>
