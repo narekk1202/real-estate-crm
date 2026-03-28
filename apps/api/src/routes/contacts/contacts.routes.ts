@@ -1,11 +1,8 @@
 import { zValidator } from '@hono/zod-validator';
+import { contactStatusValues, contactTypeValues } from '@crm/shared';
 import { Hono } from 'hono';
 import z from 'zod';
-import {
-	contactStatus,
-	contactType,
-	insertContactsSchema,
-} from '../../db/schemas/contacts.js';
+import { insertContactsSchema } from '../../db/schemas/contacts.js';
 import { authMiddleware } from '../../middlewares/auth.js';
 import { contactsService } from './contacts.service.js';
 
@@ -18,8 +15,8 @@ const routes = app
 			'query',
 			z.object({
 				search: z.string().optional(),
-				type: z.enum(contactType.enumValues).optional(),
-				status: z.enum(contactStatus.enumValues).optional(),
+				type: z.enum(contactTypeValues).optional(),
+				status: z.enum(contactStatusValues).optional(),
 			}),
 		),
 		async c => {

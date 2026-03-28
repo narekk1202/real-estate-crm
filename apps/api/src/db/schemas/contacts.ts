@@ -1,21 +1,11 @@
+import { contactStatusValues, contactTypeValues } from '@crm/shared';
 import { pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import z from 'zod';
 import { user } from './index.js';
 
-export const contactType = pgEnum('contact_type', [
-	'LEAD',
-	'CLIENT',
-	'AGENT',
-	'LANDLORD',
-]);
-
-export const contactStatus = pgEnum('contact_status', [
-	'ACTIVE',
-	'INACTIVE',
-	'POTENTIAL',
-	'ARCHIVED',
-]);
+export const contactType = pgEnum('contact_type', contactTypeValues);
+export const contactStatus = pgEnum('contact_status', contactStatusValues);
 
 export const contacts = pgTable('contacts', {
 	id: text()
