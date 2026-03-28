@@ -1,16 +1,7 @@
+import type { GetAllFilters } from '@crm/shared';
 import { and, eq, ilike, or, SQL } from 'drizzle-orm';
 import { db } from '../../db/index.js';
-import {
-	contacts,
-	type Contacts,
-	type NewContacts,
-} from '../../db/schemas/contacts.js';
-
-export interface GetAllFilters {
-	search?: string;
-	type?: Contacts['type'];
-	status?: Contacts['status'];
-}
+import { contacts, type NewContacts } from '../../db/schemas/contacts.js';
 
 class ContactsService {
 	async getAll(userId: string, filters: GetAllFilters) {
@@ -27,7 +18,7 @@ class ContactsService {
 				),
 			type && eq(contacts.type, type),
 			status && eq(contacts.status, status),
-		].filter(Boolean) as SQL[]; 
+		].filter(Boolean) as SQL[];
 
 		return await db
 			.select()

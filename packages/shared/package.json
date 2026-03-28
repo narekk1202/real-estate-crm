@@ -1,0 +1,9 @@
+{
+	"name": "@crm/shared",
+	"version": "0.0.1",
+	"main": "./src/index.ts",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	}
+}
