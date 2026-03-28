@@ -5,7 +5,8 @@ import { contacts, type NewContacts } from '../../db/schemas/contacts.js';
 
 class ContactsService {
 	async getAll(userId: string, filters: GetAllFilters) {
-		const { search, status, type } = filters;
+		const { search, status, type, page = 1, pageSize = 10 } = filters;
+		const offset = (page - 1) * pageSize;
 
 		const conditions = [
 			eq(contacts.userId, userId),
@@ -20,39 +21,34 @@ class ContactsService {
 			status && eq(contacts.status, status),
 		].filter(Boolean) as SQL[];
 
-		const baseConditions = [
-			eq(contacts.userId, userId),
-			search &&
-				or(
-					ilike(contacts.firstName, `%${search}%`),
-					ilike(contacts.lastName, `%${search}%`),
-					ilike(contacts.email, `%${search}%`),
-					ilike(contacts.phone, `%${search}%`),
-				),
-		].filter(Boolean) as SQL[];
-
-		const [data, stats] = await Promise.all([
+		const [data, [{ total }]] = await Promise.all([
 			db
 				.select()
 				.from(contacts)
-				.where(and(...conditions)),
+				.where(and(...conditions))
+				.limit(pageSize)
+				.offset(offset),
 			db
-				.select({
-					total: count(),
-					active: count(
-						sql`CASE WHEN ${contacts.status} = 'ACTIVE' THEN 1 END`,
-					),
-					leads: count(sql`CASE WHEN ${contacts.type} = 'LEAD' THEN 1 END`),
-					clients: count(sql`CASE WHEN ${contacts.type} = 'CLIENT' THEN 1 END`),
-				})
+				.select({ total: count() })
 				.from(contacts)
-				.where(and(...baseConditions)),
+				.where(and(...conditions)),
 		]);
 
-		return {
-			data,
-			stats: stats[0],
-		};
+		return { data, total };
+	}
+
+	async getStats(userId: string) {
+		const [stats] = await db
+			.select({
+				total: count(),
+				active: count(sql`CASE WHEN ${contacts.status} = 'ACTIVE' THEN 1 END`),
+				leads: count(sql`CASE WHEN ${contacts.type} = 'LEAD' THEN 1 END`),
+				clients: count(sql`CASE WHEN ${contacts.type} = 'CLIENT' THEN 1 END`),
+			})
+			.from(contacts)
+			.where(and(eq(contacts.userId, userId)));
+
+		return stats;
 	}
 
 	async create(userId: string, data: NewContacts) {

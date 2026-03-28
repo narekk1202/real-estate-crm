@@ -1,5 +1,5 @@
-import { zValidator } from '@hono/zod-validator';
 import { contactStatusValues, contactTypeValues } from '@crm/shared';
+import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import z from 'zod';
 import { insertContactsSchema } from '../../db/schemas/contacts.js';
@@ -17,16 +17,20 @@ const routes = app
 				search: z.string().optional(),
 				type: z.enum(contactTypeValues).optional(),
 				status: z.enum(contactStatusValues).optional(),
+				page: z.coerce.number().optional(),
+				pageSize: z.coerce.number().optional(),
 			}),
 		),
 		async c => {
 			try {
 				const user = c.var.user;
-				const { search, type, status } = c.req.valid('query');
+				const { search, type, status, page, pageSize } = c.req.valid('query');
 				const contacts = await contactsService.getAll(user.id, {
 					search,
 					type,
 					status,
+					page,
+					pageSize,
 				});
 				return c.json(contacts);
 			} catch (error) {
@@ -35,6 +39,16 @@ const routes = app
 			}
 		},
 	)
+	.get('/stats', async c => {
+		try {
+			const user = c.var.user;
+			const stats = await contactsService.getStats(user.id);
+			return c.json(stats);
+		} catch (error) {
+			console.error('Error fetching contact stats:', error);
+			return c.json({ error: 'Failed to fetch contact stats' }, 500);
+		}
+	})
 	.post('/', zValidator('json', insertContactsSchema), async c => {
 		try {
 			const user = c.var.user;

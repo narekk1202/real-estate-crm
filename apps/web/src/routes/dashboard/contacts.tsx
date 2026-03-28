@@ -3,28 +3,27 @@ import SubHeader from '#/components/contacts/sub-header'
 import { Button } from '#/components/ui/button'
 import { DataTable } from '#/components/ui/data-table'
 import { Separator } from '#/components/ui/separator'
-import { contactsQueryOptions } from '#/services/query-options/contacts'
-import type { ContactStatus, ContactType } from '@crm/shared'
-import { useQuery } from '@tanstack/react-query'
+import { useContactsPage } from '#/hooks/use-contacts-page'
 import { createFileRoute } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
-import { useState } from 'react'
-import { useDebounce } from 'use-debounce'
-
-const EMPTY_STATS = { total: 0, active: 0, leads: 0, clients: 0 }
 
 export const Route = createFileRoute('/dashboard/contacts')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const [searchText, setSearchText] = useState('')
-  const [type, setType] = useState<ContactType>()
-  const [status, setStatus] = useState<ContactStatus>()
-  const [search] = useDebounce(searchText, 300)
-  const { data: contacts, isLoading } = useQuery(
-    contactsQueryOptions({ search, type, status }),
-  )
+  const {
+    total,
+    stats,
+    contacts,
+    isLoading,
+    pagination,
+    searchText,
+    onTypeChange,
+    setPagination,
+    onSearchChange,
+    onStatusChange,
+  } = useContactsPage()
 
   return (
     <main className="page-wrap space-y-6">
@@ -46,15 +45,18 @@ function RouteComponent() {
       <Separator />
       <SubHeader
         search={searchText}
-        stats={contacts?.stats || EMPTY_STATS}
-        onSearchChange={setSearchText}
-        onTypeChange={(type) => setType(type === 'all' ? undefined : type)}
-        onStatusChange={(s) => setStatus(s === 'all' ? undefined : s)}
+        stats={stats}
+        onSearchChange={onSearchChange}
+        onTypeChange={onTypeChange}
+        onStatusChange={onStatusChange}
       />
       <DataTable
         columns={columns}
-        data={contacts?.data || []}
+        data={contacts || []}
         isLoading={isLoading}
+        totalCount={total || 0}
+        pagination={pagination}
+        onPaginationChange={setPagination}
       />
     </main>
   )

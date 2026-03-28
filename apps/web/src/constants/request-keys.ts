@@ -1,5 +1,6 @@
 export const QUERY_KEYS = {
   CONTACTS: 'contacts',
+  CONTACT_STATS: 'contact-stats',
 }
 
 export const MUTATION_KEYS = {

@@ -4,7 +4,7 @@ import * as schema from './schemas/index.js';
 
 async function main() {
 	await reset(db, schema);
-	await seed(db, schema);
+	await seed(db, schema, { count: 50 });
 }
 
 await main()

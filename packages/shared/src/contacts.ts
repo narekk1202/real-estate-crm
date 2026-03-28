@@ -5,9 +5,11 @@ export type ContactType = (typeof contactTypeValues)[number];
 export type ContactStatus = (typeof contactStatusValues)[number];
 
 export interface GetAllFilters {
-	search?: string;
-	type?: ContactType;
-	status?: ContactStatus;
+  search?: string
+  type?: ContactType
+  status?: ContactStatus
+  page?: number
+  pageSize?: number
 }
 
 export interface ContactStats {
