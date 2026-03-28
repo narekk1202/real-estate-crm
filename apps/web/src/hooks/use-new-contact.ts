@@ -1,5 +1,5 @@
 import { useNewContactMutation } from '#/services/mutations/contacts'
-import { insertContactsSchema, type NewContact } from '@crm/api/src/db/schemas'
+import { insertContactSchema, type NewContact } from '@crm/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -8,7 +8,7 @@ export const useNewContact = () => {
   const [open, setOpen] = useState(false)
 
   const form = useForm<NewContact>({
-    resolver: zodResolver(insertContactsSchema),
+    resolver: zodResolver(insertContactSchema),
     defaultValues: {
       firstName: '',
       lastName: '',

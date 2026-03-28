@@ -1,6 +1,6 @@
 import type { SerializedContacts } from '#/components/contacts/columns'
 import { useEditContactMutation } from '#/services/mutations/contacts'
-import { insertContactsSchema, type NewContact } from '@crm/api/src/db/schemas'
+import { insertContactSchema, type NewContact } from '@crm/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { Row } from '@tanstack/react-table'
 import { useState } from 'react'
@@ -10,7 +10,7 @@ export const useEditContact = (contact: Row<SerializedContacts>) => {
   const [open, setOpen] = useState(false)
 
   const form = useForm<NewContact>({
-    resolver: zodResolver(insertContactsSchema),
+    resolver: zodResolver(insertContactSchema),
     defaultValues: {
       firstName: contact.original.firstName,
       lastName: contact.original.lastName,
