@@ -23,6 +23,22 @@ export const useEditContact = (contact: Row<SerializedContacts>) => {
     },
   })
 
+  const handleOpenChange = (value: boolean) => {
+    if (value) {
+      form.reset({
+        firstName: contact.original.firstName,
+        lastName: contact.original.lastName,
+        email: contact.original.email,
+        phone: contact.original.phone,
+        type: contact.original.type,
+        status: contact.original.status,
+        source: contact.original.source,
+        notes: contact.original.notes,
+      })
+    }
+    setOpen(value)
+  }
+
   const editContact = useEditContactMutation()
 
   const onSubmit = (data: NewContact) => {
@@ -31,7 +47,6 @@ export const useEditContact = (contact: Row<SerializedContacts>) => {
       {
         onSuccess: () => {
           setOpen(false)
-          form.reset()
         },
       },
     )
@@ -41,7 +56,7 @@ export const useEditContact = (contact: Row<SerializedContacts>) => {
     form,
     open,
     isPending: editContact.isPending,
-    setOpen,
+    setOpen: handleOpenChange,
     onSubmit,
   }
 }
