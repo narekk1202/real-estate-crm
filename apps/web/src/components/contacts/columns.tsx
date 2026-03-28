@@ -2,6 +2,8 @@ import { Badge } from '#/components/ui/badge'
 import { cn } from '#/lib/utils'
 import type { Contacts } from '@crm/api/src/db/schemas'
 import { type ColumnDef } from '@tanstack/react-table'
+import { Edit, Trash } from 'lucide-react'
+import { Button } from '../ui/button'
 
 type SerializedContacts = Omit<Contacts, 'createdAt' | 'updatedAt'> & {
   createdAt: string
@@ -67,5 +69,19 @@ export const columns: ColumnDef<SerializedContacts>[] = [
         </Badge>
       )
     },
+  },
+  {
+    id: 'actions',
+    header: 'Actions',
+    cell: () => (
+      <div className="flex items-center space-x-2">
+        <Button size="icon" variant='secondary'>
+          <Edit />
+        </Button>
+        <Button size="icon" variant="destructive">
+          <Trash />
+        </Button>
+      </div>
+    ),
   },
 ]
