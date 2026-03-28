@@ -1,5 +1,4 @@
-import type { NewContact } from '@crm/api/src/db/schemas'
-import { contactStatusValues, contactTypeValues } from '@crm/shared'
+import { contactStatusValues, contactTypeValues, type NewContact } from '@crm/shared'
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import FieldError from '../errors/field-error'
 import { Button } from '../ui/button'
@@ -16,13 +15,16 @@ import {
 import { Textarea } from '../ui/textarea'
 
 interface ContactFormProps {
-  isPending: boolean
   form: UseFormReturn<NewContact>
   actionButton: React.ReactNode
   onSubmit: (data: NewContact) => void | Promise<void>
 }
 
-function ContactForm({ form, onSubmit, isPending, actionButton }: Readonly<ContactFormProps>) {
+function ContactForm({
+  form,
+  onSubmit,
+  actionButton,
+}: Readonly<ContactFormProps>) {
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}

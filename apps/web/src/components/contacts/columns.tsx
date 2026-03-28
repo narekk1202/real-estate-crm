@@ -1,13 +1,13 @@
 import { Badge } from '#/components/ui/badge'
 import { cn } from '#/lib/utils'
-import type { Contacts } from '@crm/api/src/db/schemas'
+import type { Contact } from '@crm/shared'
 import { type ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from '../ui/button'
 import DeleteContact from './delete-contact'
 import EditContact from './edit-contact'
 
-export type SerializedContacts = Omit<Contacts, 'createdAt' | 'updatedAt'> & {
+export type SerializedContacts = Omit<Contact, 'createdAt' | 'updatedAt'> & {
   createdAt: string
   updatedAt: string
 }
