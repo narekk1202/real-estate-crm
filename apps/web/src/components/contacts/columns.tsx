@@ -4,6 +4,7 @@ import type { Contacts } from '@crm/api/src/db/schemas'
 import { type ColumnDef } from '@tanstack/react-table'
 import { Edit, Trash } from 'lucide-react'
 import { Button } from '../ui/button'
+import { ArrowUpDown } from "lucide-react"
 
 type SerializedContacts = Omit<Contacts, 'createdAt' | 'updatedAt'> & {
   createdAt: string
@@ -29,7 +30,17 @@ export const columns: ColumnDef<SerializedContacts>[] = [
   },
   {
     accessorKey: 'createdAt',
-    header: 'Created At',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created At
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({ row }) => new Date(row.original.createdAt).toDateString(),
   },
   {

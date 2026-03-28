@@ -1,4 +1,11 @@
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/ui/select'
+import {
   Table,
   TableBody,
   TableCell,
@@ -9,18 +16,14 @@ import {
 import {
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
   type ColumnDef,
   type PaginationState,
+  type SortingState,
 } from '@tanstack/react-table'
+import { useState } from 'react'
 import { Button } from './button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '#/components/ui/select'
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50] as const
 
@@ -41,20 +44,23 @@ export function DataTable<TData, TValue>({
   onPaginationChange,
   isLoading,
 }: Readonly<DataTableProps<TData, TValue>>) {
+  const [sorting, setSorting] = useState<SortingState>([])
+
   const pageCount = Math.ceil(totalCount / pagination.pageSize)
 
   const table = useReactTable({
     data,
     columns,
     pageCount,
-    state: { pagination },
+    state: { pagination, sorting },
     onPaginationChange: (updater) => {
-      const next =
-        typeof updater === 'function' ? updater(pagination) : updater
+      const next = typeof updater === 'function' ? updater(pagination) : updater
       onPaginationChange(next)
     },
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
   })
 
   const rows = table.getRowModel().rows
