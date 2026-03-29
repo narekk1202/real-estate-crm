@@ -6,7 +6,7 @@ import { Separator } from '#/components/ui/separator'
 import { usePropertiesPage } from '#/hooks/use-properties-page'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/dashboard/properties')({
+export const Route = createFileRoute('/dashboard/properties/')({
   component: RouteComponent,
 })
 

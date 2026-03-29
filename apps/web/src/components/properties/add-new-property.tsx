@@ -1,3 +1,4 @@
+import { useNewProperty } from '#/hooks/use-new-property'
 import {
   Dialog,
   DialogContent,
@@ -9,10 +10,10 @@ import {
 import { Plus } from 'lucide-react'
 import { Button, buttonVariants } from '../ui/button'
 import PropertyForm from './property-form'
-import { useNewProperty } from '#/hooks/use-new-property'
 
 function AddNewProperty() {
-  const { form, open, isPending, setOpen, onSubmit } = useNewProperty()
+  const { form, files, setFiles, open, isPending, setOpen, onSubmit } =
+    useNewProperty()
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -33,6 +34,8 @@ function AddNewProperty() {
         <PropertyForm
           form={form}
           onSubmit={onSubmit}
+          files={files}
+          onFilesChange={setFiles}
           actionButton={
             <Button type="submit" size="sm" loading={isPending}>
               Add Property

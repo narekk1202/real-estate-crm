@@ -14,9 +14,12 @@ import * as React from 'react'
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 
-function ImageUploader() {
-  const [files, setFiles] = React.useState<File[]>([])
+interface ImageUploaderProps {
+  files: File[]
+  onFilesChange: (files: File[]) => void
+}
 
+function ImageUploader({ files, onFilesChange }: Readonly<ImageUploaderProps>) {
   const onFileValidate = React.useCallback(
     (file: File): string | null => {
       if (files.length >= 5) {
@@ -49,7 +52,7 @@ function ImageUploader() {
   return (
     <FileUpload
       value={files}
-      onValueChange={setFiles}
+      onValueChange={onFilesChange}
       onFileValidate={onFileValidate}
       onFileReject={onFileReject}
       accept="image/*"

@@ -66,7 +66,23 @@ const routes = app
 			console.error('Error creating property:', error);
 			return c.json({ error: 'Failed to create property' }, 500);
 		}
-	});
+	})
+	.post(
+		'/:id/images',
+		zValidator('json', z.object({ urls: z.array(z.string()) })),
+		async c => {
+			try {
+				const user = c.var.user;
+				const { id } = c.req.param();
+				const { urls } = c.req.valid('json');
+				await propertiesService.addImages(id, user.id, urls);
+				return c.json({ success: true }, 201);
+			} catch (error) {
+				console.error('Error adding property images:', error);
+				return c.json({ error: 'Failed to add property images' }, 500);
+			}
+		},
+	);
 
 export default routes;
 export type PropertiesRoutes = typeof routes;

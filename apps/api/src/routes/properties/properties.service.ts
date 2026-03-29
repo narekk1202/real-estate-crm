@@ -119,6 +119,19 @@ class PropertiesService {
 			.values({ ...data, userId })
 			.returning();
 	}
+
+	async addImages(propertyId: string, userId: string, urls: string[]) {
+		const [property] = await db
+			.select({ id: properties.id })
+			.from(properties)
+			.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)));
+
+		if (!property) throw new Error('Property not found or access denied');
+
+		await db
+			.insert(propertyImages)
+			.values(urls.map((url, order) => ({ propertyId, url, order })));
+	}
 }
 
 export const propertiesService = new PropertiesService();

@@ -26,6 +26,8 @@ interface PropertyFormProps {
   form: UseFormReturn<NewPropertyInput, unknown, NewProperty>
   actionButton: React.ReactNode
   onSubmit: (data: NewProperty) => void | Promise<void>
+  files: File[]
+  onFilesChange: (files: File[]) => void
 }
 
 const toOptionalNumber = (value: unknown) =>
@@ -35,6 +37,8 @@ function PropertyForm({
   form,
   onSubmit,
   actionButton,
+  files,
+  onFilesChange,
 }: Readonly<PropertyFormProps>) {
   return (
     <form
@@ -226,7 +230,7 @@ function PropertyForm({
         </div>
       </div>
 
-      <ImageUploader />
+      <ImageUploader files={files} onFilesChange={onFilesChange} />
 
       <div className="flex justify-end gap-2 pt-2">
         <DialogTrigger asChild>

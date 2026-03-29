@@ -13,13 +13,14 @@ import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as DashboardPropertiesRouteImport } from './routes/dashboard/properties'
 import { Route as DashboardDealsRouteImport } from './routes/dashboard/deals'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
+import { Route as DashboardPropertiesIndexRouteImport } from './routes/dashboard/properties/index'
 import { Route as DashboardContactsIndexRouteImport } from './routes/dashboard/contacts/index'
+import { Route as DashboardPropertiesPropertyIdRouteImport } from './routes/dashboard/properties/$propertyId'
 import { Route as DashboardContactsContactIdRouteImport } from './routes/dashboard/contacts/$contactId'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
@@ -39,11 +40,6 @@ const IndexRoute = IndexRouteImport.update({
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
-const DashboardPropertiesRoute = DashboardPropertiesRouteImport.update({
-  id: '/properties',
-  path: '/properties',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardDealsRoute = DashboardDealsRouteImport.update({
@@ -71,11 +67,23 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const DashboardPropertiesIndexRoute =
+  DashboardPropertiesIndexRouteImport.update({
+    id: '/properties/',
+    path: '/properties/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardContactsIndexRoute = DashboardContactsIndexRouteImport.update({
   id: '/contacts/',
   path: '/contacts/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardPropertiesPropertyIdRoute =
+  DashboardPropertiesPropertyIdRouteImport.update({
+    id: '/properties/$propertyId',
+    path: '/properties/$propertyId',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardContactsContactIdRoute =
   DashboardContactsContactIdRouteImport.update({
     id: '/contacts/$contactId',
@@ -91,10 +99,11 @@ export interface FileRoutesByFullPath {
   '/register': typeof AuthRegisterRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/dashboard/deals': typeof DashboardDealsRoute
-  '/dashboard/properties': typeof DashboardPropertiesRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/contacts/$contactId': typeof DashboardContactsContactIdRoute
+  '/dashboard/properties/$propertyId': typeof DashboardPropertiesPropertyIdRoute
   '/dashboard/contacts/': typeof DashboardContactsIndexRoute
+  '/dashboard/properties/': typeof DashboardPropertiesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -103,10 +112,11 @@ export interface FileRoutesByTo {
   '/register': typeof AuthRegisterRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/dashboard/deals': typeof DashboardDealsRoute
-  '/dashboard/properties': typeof DashboardPropertiesRoute
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard/contacts/$contactId': typeof DashboardContactsContactIdRoute
+  '/dashboard/properties/$propertyId': typeof DashboardPropertiesPropertyIdRoute
   '/dashboard/contacts': typeof DashboardContactsIndexRoute
+  '/dashboard/properties': typeof DashboardPropertiesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -118,10 +128,11 @@ export interface FileRoutesById {
   '/_auth/register': typeof AuthRegisterRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/dashboard/deals': typeof DashboardDealsRoute
-  '/dashboard/properties': typeof DashboardPropertiesRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/contacts/$contactId': typeof DashboardContactsContactIdRoute
+  '/dashboard/properties/$propertyId': typeof DashboardPropertiesPropertyIdRoute
   '/dashboard/contacts/': typeof DashboardContactsIndexRoute
+  '/dashboard/properties/': typeof DashboardPropertiesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -133,10 +144,11 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/dashboard/deals'
-    | '/dashboard/properties'
     | '/dashboard/'
     | '/dashboard/contacts/$contactId'
+    | '/dashboard/properties/$propertyId'
     | '/dashboard/contacts/'
+    | '/dashboard/properties/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -145,10 +157,11 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/dashboard/deals'
-    | '/dashboard/properties'
     | '/dashboard'
     | '/dashboard/contacts/$contactId'
+    | '/dashboard/properties/$propertyId'
     | '/dashboard/contacts'
+    | '/dashboard/properties'
   id:
     | '__root__'
     | '/'
@@ -159,10 +172,11 @@ export interface FileRouteTypes {
     | '/_auth/register'
     | '/_auth/reset-password'
     | '/dashboard/deals'
-    | '/dashboard/properties'
     | '/dashboard/'
     | '/dashboard/contacts/$contactId'
+    | '/dashboard/properties/$propertyId'
     | '/dashboard/contacts/'
+    | '/dashboard/properties/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -201,13 +215,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/properties': {
-      id: '/dashboard/properties'
-      path: '/properties'
-      fullPath: '/dashboard/properties'
-      preLoaderRoute: typeof DashboardPropertiesRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
     '/dashboard/deals': {
       id: '/dashboard/deals'
       path: '/deals'
@@ -243,11 +250,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/dashboard/properties/': {
+      id: '/dashboard/properties/'
+      path: '/properties'
+      fullPath: '/dashboard/properties/'
+      preLoaderRoute: typeof DashboardPropertiesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/contacts/': {
       id: '/dashboard/contacts/'
       path: '/contacts'
       fullPath: '/dashboard/contacts/'
       preLoaderRoute: typeof DashboardContactsIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/properties/$propertyId': {
+      id: '/dashboard/properties/$propertyId'
+      path: '/properties/$propertyId'
+      fullPath: '/dashboard/properties/$propertyId'
+      preLoaderRoute: typeof DashboardPropertiesPropertyIdRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/contacts/$contactId': {
@@ -280,18 +301,20 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface DashboardRouteRouteChildren {
   DashboardDealsRoute: typeof DashboardDealsRoute
-  DashboardPropertiesRoute: typeof DashboardPropertiesRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardContactsContactIdRoute: typeof DashboardContactsContactIdRoute
+  DashboardPropertiesPropertyIdRoute: typeof DashboardPropertiesPropertyIdRoute
   DashboardContactsIndexRoute: typeof DashboardContactsIndexRoute
+  DashboardPropertiesIndexRoute: typeof DashboardPropertiesIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardDealsRoute: DashboardDealsRoute,
-  DashboardPropertiesRoute: DashboardPropertiesRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardContactsContactIdRoute: DashboardContactsContactIdRoute,
+  DashboardPropertiesPropertyIdRoute: DashboardPropertiesPropertyIdRoute,
   DashboardContactsIndexRoute: DashboardContactsIndexRoute,
+  DashboardPropertiesIndexRoute: DashboardPropertiesIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(

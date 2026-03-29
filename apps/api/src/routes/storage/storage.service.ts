@@ -11,7 +11,10 @@ class StorageService {
 			ContentType: contentType,
 		});
 
-		const url = await getSignedUrl(r2, command, { expiresIn: 300 });
+		const url = await getSignedUrl(r2, command, {
+			expiresIn: 300,
+			signableHeaders: new Set(['content-type']),
+		});
 		return { uploadUrl: url, key };
 	}
 
