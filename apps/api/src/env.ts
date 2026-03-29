@@ -9,6 +9,9 @@ export const env = createEnv({
 		BETTER_AUTH_URL: z.url(),
 		FRONTEND_URL: z.url(),
 		RESEND_API_KEY: z.string().startsWith('re_'),
+		R2_ENDPOINT: z.url(),
+		R2_ACCESS_KEY_ID: z.string(),
+		R2_SECRET_ACCESS_KEY: z.string(),
 	},
 	runtimeEnv: process.env,
 });
