@@ -1,5 +1,5 @@
 import { QUERY_KEYS } from '#/constants/request-keys'
-import type { GetAllFilters } from '@crm/shared'
+import type { GetAllContactsFilters } from '@crm/shared'
 import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 import { client } from '../api'
 
@@ -9,7 +9,7 @@ export const contactsQueryOptions = ({
   status,
   page,
   pageSize,
-}: GetAllFilters) => {
+}: GetAllContactsFilters) => {
   const filters = {
     search: search || undefined,
     type: type || undefined,
