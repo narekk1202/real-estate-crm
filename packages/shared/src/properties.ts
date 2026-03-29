@@ -27,6 +27,7 @@ export interface GetAllPropertiesFilters {
 	search?: string;
 	type?: PropertyType;
 	status?: PropertyStatus;
+	listingType?: ListingType;
 	page?: number;
 	pageSize?: number;
 }

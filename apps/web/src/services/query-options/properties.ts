@@ -9,11 +9,13 @@ export const propertiesQueryOptions = ({
   search,
   status,
   pageSize,
+  listingType,
 }: GetAllPropertiesFilters) => {
   const filters = {
     search: search || undefined,
     type: type || undefined,
     status: status || undefined,
+    listingType: listingType || undefined,
     page: page ? String(page) : undefined,
     pageSize: pageSize ? String(pageSize) : undefined,
   }

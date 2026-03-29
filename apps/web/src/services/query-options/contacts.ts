@@ -21,9 +21,7 @@ export const contactsQueryOptions = ({
   return queryOptions({
     queryKey: [QUERY_KEYS.CONTACTS, filters],
     queryFn: async () => {
-      const result = await client.api.contacts.$get({
-        query: filters,
-      })
+      const result = await client.api.contacts.$get({ query: filters })
 
       if (!result.ok) {
         throw new Error('Failed to fetch contacts')

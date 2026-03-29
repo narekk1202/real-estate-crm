@@ -1,11 +1,18 @@
 import type { GetAllPropertiesFilters } from '@crm/shared';
 import { and, count, eq, ilike, or, SQL } from 'drizzle-orm';
-import { db } from 'src/db/index.js';
-import { properties } from 'src/db/schemas/properties.js';
+import { db } from '../../db/index.js';
+import { properties } from '../../db/schemas/properties.js';
 
 class PropertiesService {
 	async getAll(userId: string, filters: GetAllPropertiesFilters) {
-		const { search, status, type, page = 1, pageSize = 10 } = filters;
+		const {
+			search,
+			status,
+			type,
+			listingType,
+			page = 1,
+			pageSize = 10,
+		} = filters;
 		const offset = (page - 1) * pageSize;
 
 		const conditions = [
@@ -20,6 +27,7 @@ class PropertiesService {
 				),
 			type && eq(properties.type, type),
 			status && eq(properties.status, status),
+			listingType && eq(properties.listingType, listingType),
 		].filter(Boolean) as SQL[];
 
 		const [data, [{ total }]] = await Promise.all([
