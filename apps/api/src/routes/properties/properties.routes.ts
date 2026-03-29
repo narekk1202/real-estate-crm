@@ -1,4 +1,5 @@
 import {
+	insertPropertySchema,
 	listingTypeValues,
 	propertyStatusValues,
 	propertyTypeValues,
@@ -53,6 +54,17 @@ const routes = app
 		} catch (error) {
 			console.error('Error fetching property stats:', error);
 			return c.json({ error: 'Failed to fetch property stats' }, 500);
+		}
+	})
+	.post('/', zValidator('json', insertPropertySchema), async c => {
+		try {
+			const user = c.var.user;
+			const data = c.req.valid('json');
+			const newProperty = await propertiesService.create(user.id, data);
+			return c.json(newProperty, 201);
+		} catch (error) {
+			console.error('Error creating property:', error);
+			return c.json({ error: 'Failed to create property' }, 500);
 		}
 	});
 

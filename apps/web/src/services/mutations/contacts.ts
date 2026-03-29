@@ -1,8 +1,8 @@
 import { MUTATION_KEYS, QUERY_KEYS } from '#/constants/request-keys'
-import type { NewContact } from '@crm/api/src/db/schemas'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { client } from '../api'
+import type { NewContact } from '@crm/shared'
 
 export const useNewContactMutation = () => {
   const queryClient = useQueryClient()

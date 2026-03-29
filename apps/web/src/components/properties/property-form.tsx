@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from '../ui/select'
 import { Textarea } from '../ui/textarea'
+import ContactSelect from './contact-select'
 import ImageUploader from './image-uploader'
 
 interface PropertyFormProps {
@@ -165,6 +166,20 @@ function PropertyForm({
         <FieldError field="price" form={form} />
       </div>
 
+      <div className="grid gap-1.5">
+        <Label>
+          Owner{' '}
+          <span className="text-muted-foreground text-xs">(optional)</span>
+        </Label>
+        <Controller
+          control={form.control}
+          name="ownerId"
+          render={({ field }) => (
+            <ContactSelect value={field.value} onChange={field.onChange} />
+          )}
+        />
+      </div>
+
       <div className="grid grid-cols-3 gap-4">
         <div className="grid gap-1.5">
           <Label htmlFor="bedrooms">
@@ -207,7 +222,7 @@ function PropertyForm({
         </div>
       </div>
 
-			<ImageUploader />
+      <ImageUploader />
 
       <div className="flex justify-end gap-2 pt-2">
         <DialogTrigger asChild>

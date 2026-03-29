@@ -1,3 +1,4 @@
+import { useNewPropertyMutation } from '#/services/mutations/properties'
 import { insertPropertySchema, type NewProperty } from '@crm/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
@@ -5,6 +6,7 @@ import { useForm } from 'react-hook-form'
 
 export const useNewProperty = () => {
   const [open, setOpen] = useState(false)
+  const newProperty = useNewPropertyMutation()
 
   const form = useForm<NewProperty>({
     resolver: zodResolver(insertPropertySchema),
@@ -25,8 +27,13 @@ export const useNewProperty = () => {
     },
   })
 
-  const onSubmit = (_data: NewProperty) => {
-    // TODO: wire up mutation
+  const onSubmit = (data: NewProperty) => {
+    newProperty.mutate(data, {
+      onSuccess: () => {
+        setOpen(false)
+        form.reset()
+      },
+    })
   }
 
   return {

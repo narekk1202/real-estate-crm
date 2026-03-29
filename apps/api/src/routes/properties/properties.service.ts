@@ -1,4 +1,4 @@
-import type { GetAllPropertiesFilters } from '@crm/shared';
+import type { GetAllPropertiesFilters, NewProperty } from '@crm/shared';
 import {
 	and,
 	count,
@@ -110,6 +110,13 @@ class PropertiesService {
 			.where(and(eq(properties.userId, userId)));
 
 		return stats;
+	}
+
+	async create(userId: string, data: NewProperty) {
+		return await db
+			.insert(properties)
+			.values({ ...data, userId })
+			.returning();
 	}
 }
 

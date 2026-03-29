@@ -1,6 +1,10 @@
 import { QUERY_KEYS } from '#/constants/request-keys'
 import type { GetAllContactsFilters } from '@crm/shared'
-import { keepPreviousData, queryOptions } from '@tanstack/react-query'
+import {
+  infiniteQueryOptions,
+  keepPreviousData,
+  queryOptions,
+} from '@tanstack/react-query'
 import { client } from '../api'
 
 export const contactsQueryOptions = ({
@@ -32,6 +36,27 @@ export const contactsQueryOptions = ({
     placeholderData: keepPreviousData,
   })
 }
+
+export const contactsInfiniteQueryOptions = (search?: string) =>
+  infiniteQueryOptions({
+    queryKey: [QUERY_KEYS.CONTACTS, 'infinite', { search }],
+    queryFn: async ({ pageParam }) => {
+      const result = await client.api.contacts.$get({
+        query: {
+          search: search || undefined,
+          page: String(pageParam),
+          pageSize: '10',
+        },
+      })
+      if (!result.ok) throw new Error('Failed to fetch contacts')
+      return await result.json()
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const loaded = allPages.reduce((sum, p) => sum + p.data.length, 0)
+      return loaded < lastPage.total ? allPages.length + 1 : undefined
+    },
+  })
 
 export const contactsStatsQueryOptions = () => {
   return queryOptions({

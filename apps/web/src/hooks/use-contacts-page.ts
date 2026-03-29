@@ -6,7 +6,7 @@ import type { ContactStatus, ContactType } from '@crm/shared'
 import { useQuery } from '@tanstack/react-query'
 import type { PaginationState } from '@tanstack/react-table'
 import { useState } from 'react'
-import { useDebounce } from 'use-debounce'
+import { useDebounceValue } from 'usehooks-ts'
 
 const EMPTY_STATS = { total: 0, active: 0, leads: 0, clients: 0 }
 
@@ -14,7 +14,7 @@ export function useContactsPage() {
   const [searchText, setSearchText] = useState('')
   const [type, setType] = useState<ContactType>()
   const [status, setStatus] = useState<ContactStatus>()
-  const [search] = useDebounce(searchText, 300)
+  const [search] = useDebounceValue(searchText, 300)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,

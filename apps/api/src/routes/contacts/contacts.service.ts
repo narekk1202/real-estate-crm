@@ -1,7 +1,7 @@
-import type { GetAllContactsFilters } from '@crm/shared';
+import type { GetAllContactsFilters, NewContact } from '@crm/shared';
 import { and, count, eq, ilike, or, SQL, sql } from 'drizzle-orm';
 import { db } from '../../db/index.js';
-import { contacts, type NewContact } from '../../db/schemas/contacts.js';
+import { contacts } from '../../db/schemas/contacts.js';
 
 class ContactsService {
 	async getAll(userId: string, filters: GetAllContactsFilters) {

@@ -1,8 +1,7 @@
-import { contactStatusValues, contactTypeValues } from '@crm/shared';
+import { contactStatusValues, contactTypeValues, insertContactSchema } from '@crm/shared';
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import z from 'zod';
-import { insertContactsSchema } from '../../db/schemas/contacts.js';
 import { authMiddleware } from '../../middlewares/auth.js';
 import { contactsService } from './contacts.service.js';
 
@@ -61,7 +60,7 @@ const routes = app
 			return c.json({ error: 'Failed to fetch contact' }, 500);
 		}
 	})
-	.post('/', zValidator('json', insertContactsSchema), async c => {
+	.post('/', zValidator('json', insertContactSchema), async c => {
 		try {
 			const user = c.var.user;
 			const data = c.req.valid('json');
@@ -72,7 +71,7 @@ const routes = app
 			return c.json({ error: 'Failed to create contact' }, 500);
 		}
 	})
-	.put('/:id', zValidator('json', insertContactsSchema), async c => {
+	.put('/:id', zValidator('json', insertContactSchema), async c => {
 		try {
 			const user = c.var.user;
 			const data = c.req.valid('json');
