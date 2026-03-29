@@ -25,7 +25,7 @@ function DeleteContact({ contact, onSuccess }: Readonly<DeleteContactProps>) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button size="icon-sm" variant="destructive">
+        <Button size="icon-sm" variant="outline">
           <Trash className="size-4" />
         </Button>
       </AlertDialogTrigger>

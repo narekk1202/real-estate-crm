@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '#/components/ui/table'
+import { cn } from '#/lib/utils'
 import {
   flexRender,
   getCoreRowModel,
@@ -88,10 +89,10 @@ export function DataTable<TData, TValue>({
           key={row.id}
           data-state={row.getIsSelected() && 'selected'}
           onClick={() => onRowClick?.(row.original)}
-          className={onRowClick ? 'cursor-pointer' : undefined}
+          className={cn('', onRowClick && 'cursor-pointer')}
         >
           {row.getVisibleCells().map((cell) => (
-            <TableCell key={cell.id}>
+            <TableCell key={cell.id} className="py-3">
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </TableCell>
           ))}
@@ -116,7 +117,7 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="text-muted-foreground">
                     {header.isPlaceholder
                       ? null
                       : flexRender(

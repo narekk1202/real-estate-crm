@@ -86,10 +86,13 @@ export const columns: ColumnDef<SerializedContacts>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => (
-      <div className="flex items-center space-x-2">
+      <button
+        className="flex items-center space-x-2"
+        onClick={(e) => e.stopPropagation()}
+      >
         <EditContact contact={row.original} />
         <DeleteContact contact={row.original} />
-      </div>
+      </button>
     ),
   },
 ]
