@@ -4,7 +4,7 @@ import SubHeader from '#/components/contacts/sub-header'
 import { DataTable } from '#/components/ui/data-table'
 import { Separator } from '#/components/ui/separator'
 import { useContactsPage } from '#/hooks/use-contacts-page'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/dashboard/contacts/')({
   component: RouteComponent,
@@ -23,6 +23,8 @@ function RouteComponent() {
     onSearchChange,
     onStatusChange,
   } = useContactsPage()
+
+  const navigate = useNavigate()
 
   return (
     <main className="page-wrap space-y-6">
@@ -51,6 +53,12 @@ function RouteComponent() {
         totalCount={total || 0}
         pagination={pagination}
         onPaginationChange={setPagination}
+        onRowClick={(row) =>
+          navigate({
+            to: '/dashboard/contacts/$contactId',
+            params: { contactId: row.id },
+          })
+        }
       />
     </main>
   )

@@ -1,7 +1,6 @@
 import { Badge } from '#/components/ui/badge'
 import { cn } from '#/lib/utils'
 import type { Contact } from '@crm/shared'
-import { Link } from '@tanstack/react-router'
 import { type ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from '../ui/button'
@@ -17,15 +16,6 @@ export const columns: ColumnDef<SerializedContacts>[] = [
   {
     accessorKey: 'firstName',
     header: 'First Name',
-    cell: ({ row }) => (
-      <Link
-        to="/dashboard/contacts/$contactId"
-        params={{ contactId: row.original.id }}
-        className="font-medium hover:underline"
-      >
-        {row.original.firstName}
-      </Link>
-    ),
   },
   {
     accessorKey: 'lastName',

@@ -28,21 +28,24 @@ import { Button } from './button'
 const PAGE_SIZE_OPTIONS = [10, 25, 50] as const
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
   data: TData[]
+
   totalCount: number
-  pagination: PaginationState
-  onPaginationChange: (pagination: PaginationState) => void
   isLoading?: boolean
+  pagination: PaginationState
+  onRowClick?: (row: TData) => void
+  columns: ColumnDef<TData, TValue>[]
+  onPaginationChange: (pagination: PaginationState) => void
 }
 
 export function DataTable<TData, TValue>({
-  columns,
   data,
-  totalCount,
-  pagination,
-  onPaginationChange,
+  columns,
   isLoading,
+  pagination,
+  totalCount,
+  onRowClick,
+  onPaginationChange,
 }: Readonly<DataTableProps<TData, TValue>>) {
   const [sorting, setSorting] = useState<SortingState>([])
 
@@ -81,7 +84,12 @@ export function DataTable<TData, TValue>({
 
     if (rows.length > 0) {
       return rows.map((row) => (
-        <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+        <TableRow
+          key={row.id}
+          data-state={row.getIsSelected() && 'selected'}
+          onClick={() => onRowClick?.(row.original)}
+          className={onRowClick ? 'cursor-pointer' : undefined}
+        >
           {row.getVisibleCells().map((cell) => (
             <TableCell key={cell.id}>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
