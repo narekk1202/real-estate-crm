@@ -1,6 +1,6 @@
 import {
   contactsQueryOptions,
-  contactStatsQueryOptions,
+  contactsStatsQueryOptions,
 } from '#/services/query-options/contacts'
 import type { ContactStatus, ContactType } from '@crm/shared'
 import { useQuery } from '@tanstack/react-query'
@@ -30,7 +30,7 @@ export function useContactsPage() {
     }),
   )
 
-  const { data: stats } = useQuery(contactStatsQueryOptions())
+  const { data: stats } = useQuery(contactsStatsQueryOptions())
 
   const onTypeChange = (value: ContactType | 'all') => {
     setType(value === 'all' ? undefined : value)

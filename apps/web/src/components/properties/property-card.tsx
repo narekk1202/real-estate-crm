@@ -1,46 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import { Card, CardContent } from '#/components/ui/card'
 import { cn } from '#/lib/utils'
+import type { ListingType, Property, PropertyStatus } from '@crm/shared'
 import { Bath, Bed, Home, Maximize2 } from 'lucide-react'
-
-export type PropertyStatus =
-  | 'AVAILABLE'
-  | 'RESERVED'
-  | 'SOLD'
-  | 'RENTED'
-  | 'OFF_MARKET'
-export type PropertyType =
-  | 'APARTMENT'
-  | 'HOUSE'
-  | 'COMMERCIAL'
-  | 'LAND'
-  | 'OFFICE'
-  | 'WAREHOUSE'
-  | 'GARAGE'
-export type ListingType = 'SALE' | 'RENT'
-
-export interface Property {
-  id: string
-  title: string
-  address: string
-  city: string
-  country: string
-  type: PropertyType
-  listingType: ListingType
-  status: PropertyStatus
-  price: string
-  bedrooms?: number | null
-  bathrooms?: number | null
-  areaM2?: number | null
-  imageUrl?: string | null
-  agent?: {
-    id: string
-    name: string
-    avatarUrl?: string | null
-  } | null
-}
 
 const statusConfig: Record<
   PropertyStatus,
@@ -84,15 +47,6 @@ const listingConfig: Record<ListingType, { label: string; className: string }> =
     },
   }
 
-function getInitials(name: string) {
-  return name
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2)
-}
-
 function formatPrice(price: string, listingType: ListingType) {
   const numericPrice = Number.parseFloat(price)
   const formatted = Number.isNaN(numericPrice)
@@ -123,18 +77,10 @@ function PropertyCard({
   return (
     <Card className="gap-0 overflow-hidden py-0">
       <div className="relative bg-muted h-44 flex items-center justify-center border-b">
-        {property.imageUrl ? (
-          <img
-            src={property.imageUrl}
-            alt={property.title}
-            className="object-cover w-full h-full"
-          />
-        ) : (
-          <div className="flex flex-col items-center gap-1.5 text-muted-foreground select-none">
-            <Home className="size-10 opacity-30" />
-            <span className="text-xs">No photo</span>
-          </div>
-        )}
+        <div className="flex flex-col items-center gap-1.5 text-muted-foreground select-none">
+          <Home className="size-10 opacity-30" />
+          <span className="text-xs">No photo</span>
+        </div>
 
         <div className="absolute top-3 left-3">
           <Badge className={cn('border-0 font-medium', status.className)}>
@@ -186,28 +132,6 @@ function PropertyCard({
         )}
 
         <div className="flex items-center justify-between gap-2 pt-1 border-t">
-          {property.agent ? (
-            <div className="flex items-center gap-2 min-w-0">
-              <Avatar size="sm">
-                {property.agent.avatarUrl && (
-                  <AvatarImage
-                    src={property.agent.avatarUrl}
-                    alt={property.agent.name}
-                  />
-                )}
-                <AvatarFallback className="text-xs">
-                  {getInitials(property.agent.name)}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-xs text-muted-foreground truncate">
-                {property.agent.name.split(' ')[0]}{' '}
-                {property.agent.name.split(' ')[1]?.[0]}.
-              </span>
-            </div>
-          ) : (
-            <span />
-          )}
-
           <div className="flex items-center gap-1.5">
             <Button
               size="sm"

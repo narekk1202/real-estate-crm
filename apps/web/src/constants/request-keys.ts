@@ -3,6 +3,7 @@ export const QUERY_KEYS = {
   CONTACT: 'contact',
   CONTACT_STATS: 'contact-stats',
   PROPERTIES: 'properties',
+  PROPERTIES_STATS: 'properties-stats',
 }
 
 export const MUTATION_KEYS = {

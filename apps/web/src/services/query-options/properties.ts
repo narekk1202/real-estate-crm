@@ -32,3 +32,18 @@ export const propertiesQueryOptions = ({
     placeholderData: keepPreviousData,
   })
 }
+
+export const propertiesStatsQueryOptions = () => {
+  return queryOptions({
+    queryKey: [QUERY_KEYS.PROPERTIES_STATS],
+    queryFn: async () => {
+      const result = await client.api.properties.stats.$get()
+
+      if (!result.ok) {
+        throw new Error('Failed to fetch property stats')
+      }
+
+      return await result.json()
+    },
+  })
+}

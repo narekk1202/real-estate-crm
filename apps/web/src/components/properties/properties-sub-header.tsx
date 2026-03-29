@@ -6,15 +6,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '#/components/ui/select'
+import {
+  listingTypeValues,
+  propertyStatusValues,
+  propertyTypeValues,
+  type ListingType,
+  type PropertyStats,
+  type PropertyStatus,
+  type PropertyType,
+} from '@crm/shared'
 import { Search } from 'lucide-react'
-import type { ListingType, PropertyStatus, PropertyType } from './property-card'
-
-export interface PropertyStats {
-  total: number
-  available: number
-  reserved: number
-  soldOrRented: number
-}
 
 interface PropertiesSubHeaderProps {
   stats: PropertyStats
@@ -23,24 +24,6 @@ interface PropertiesSubHeaderProps {
   onTypeChange?: (value: PropertyType | 'all') => void
   onListingTypeChange?: (value: ListingType | 'all') => void
   onStatusChange?: (value: PropertyStatus | 'all') => void
-}
-
-const propertyTypeLabels: Record<PropertyType, string> = {
-  APARTMENT: 'Apartment',
-  HOUSE: 'House',
-  COMMERCIAL: 'Commercial',
-  LAND: 'Land',
-  OFFICE: 'Office',
-  WAREHOUSE: 'Warehouse',
-  GARAGE: 'Garage',
-}
-
-const propertyStatusLabels: Record<PropertyStatus, string> = {
-  AVAILABLE: 'Available',
-  RESERVED: 'Reserved',
-  SOLD: 'Sold',
-  RENTED: 'Rented',
-  OFF_MARKET: 'Off market',
 }
 
 function PropertiesSubHeader({
@@ -55,7 +38,7 @@ function PropertiesSubHeader({
     { label: 'Total', value: stats.total },
     { label: 'Available', value: stats.available },
     { label: 'Reserved', value: stats.reserved },
-    { label: 'Sold / rented', value: stats.soldOrRented },
+    { label: 'Sold / rented', value: stats.sold + stats.rented },
   ]
 
   return (
@@ -92,13 +75,11 @@ function PropertiesSubHeader({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All types</SelectItem>
-              {(Object.keys(propertyTypeLabels) as PropertyType[]).map(
-                (type) => (
-                  <SelectItem key={type} value={type}>
-                    {propertyTypeLabels[type]}
-                  </SelectItem>
-                ),
-              )}
+              {propertyTypeValues.map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type.charAt(0) + type.slice(1).toLowerCase()}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -113,8 +94,11 @@ function PropertiesSubHeader({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All listings</SelectItem>
-              <SelectItem value="SALE">Sale</SelectItem>
-              <SelectItem value="RENT">Rent</SelectItem>
+              {listingTypeValues.map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type.charAt(0) + type.slice(1).toLowerCase()}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -127,13 +111,13 @@ function PropertiesSubHeader({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All statuses</SelectItem>
-              {(Object.keys(propertyStatusLabels) as PropertyStatus[]).map(
-                (status) => (
-                  <SelectItem key={status} value={status}>
-                    {propertyStatusLabels[status]}
-                  </SelectItem>
-                ),
-              )}
+              {propertyStatusValues.map((status) => (
+                <SelectItem key={status} value={status}>
+                  {status === 'OFF_MARKET'
+                    ? 'Off market'
+                    : status.charAt(0) + status.slice(1).toLowerCase()}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

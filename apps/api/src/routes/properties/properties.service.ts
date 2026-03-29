@@ -1,5 +1,5 @@
 import type { GetAllPropertiesFilters } from '@crm/shared';
-import { and, count, eq, ilike, or, SQL } from 'drizzle-orm';
+import { and, count, eq, ilike, or, sql, SQL } from 'drizzle-orm';
 import { db } from '../../db/index.js';
 import { properties } from '../../db/schemas/properties.js';
 
@@ -45,6 +45,21 @@ class PropertiesService {
 
 		return { data, total };
 	}
+
+	async getStats(userId: string) {
+			const [stats] = await db
+				.select({
+					total: count(),
+					available: count(sql`CASE WHEN ${properties.status} = 'AVAILABLE' THEN 1 END`),
+					reserved: count(sql`CASE WHEN ${properties.status} = 'RESERVED' THEN 1 END`),
+					sold: count(sql`CASE WHEN ${properties.status} = 'SOLD' THEN 1 END`),
+					rented: count(sql`CASE WHEN ${properties.status} = 'RENTED' THEN 1 END`),
+				})
+				.from(properties)
+				.where(and(eq(properties.userId, userId)));
+	
+			return stats;
+		}
 }
 
 export const propertiesService = new PropertiesService();

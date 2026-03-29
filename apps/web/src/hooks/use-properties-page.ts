@@ -1,9 +1,12 @@
-import { propertiesQueryOptions } from '#/services/query-options/properties'
+import {
+  propertiesQueryOptions,
+  propertiesStatsQueryOptions,
+} from '#/services/query-options/properties'
 import type { ListingType, PropertyStatus, PropertyType } from '@crm/shared'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-const EMPTY_STATS = { total: 0, available: 0, reserved: 0, soldOrRented: 0 }
+const EMPTY_STATS = { total: 0, available: 0, reserved: 0, sold: 0, rented: 0 }
 
 export function usePropertiesPage() {
   const [searchText, setSearchText] = useState('')
@@ -25,6 +28,8 @@ export function usePropertiesPage() {
       pageSize: pagination.pageSize,
     }),
   )
+
+  const { data: stats } = useQuery(propertiesStatsQueryOptions())
 
   const onTypeChange = (value: PropertyType | 'all') => {
     setType(value === 'all' ? undefined : value)
@@ -48,8 +53,8 @@ export function usePropertiesPage() {
 
   return {
     searchText,
-    stats: properties || EMPTY_STATS,
-    properties,
+    stats: stats ?? EMPTY_STATS,
+    properties: properties?.data ?? [],
     isLoading: isPending,
     onSearchChange,
     onTypeChange,

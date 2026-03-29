@@ -33,7 +33,7 @@ export const contactsQueryOptions = ({
   })
 }
 
-export const contactStatsQueryOptions = () => {
+export const contactsStatsQueryOptions = () => {
   return queryOptions({
     queryKey: [QUERY_KEYS.CONTACT_STATS],
     queryFn: async () => {

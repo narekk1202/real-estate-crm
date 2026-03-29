@@ -1,5 +1,6 @@
 import { Skeleton } from '#/components/ui/skeleton'
-import PropertyCard, { type Property } from './property-card'
+import type { Property } from '@crm/shared'
+import PropertyCard from './property-card'
 
 interface PropertiesGridProps {
   properties: Property[]
