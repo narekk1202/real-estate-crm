@@ -14,10 +14,12 @@ export const useNewContactMutation = () => {
       return await response.json()
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACTS] })
-      await queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.CONTACT_STATS],
-      })
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACTS] }),
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.CONTACT_STATS],
+        }),
+      ])
       toast.success('Contact created successfully!')
     },
     onError: (error) => {
@@ -27,23 +29,30 @@ export const useNewContactMutation = () => {
   })
 }
 
-export const useEditContactMutation = () => {
+export const useEditContactMutation = ({
+  contactId,
+}: {
+  contactId: string
+}) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationKey: [MUTATION_KEYS.EDIT_CONTACT],
-    mutationFn: async ({ id, data }: { id: string; data: NewContact }) => {
+    mutationFn: async (data: NewContact) => {
       const response = await client.api.contacts[':id'].$put({
         json: data,
-        param: { id },
+        param: { id: contactId },
       })
       if (!response.ok) throw new Error('Failed to edit contact')
       return await response.json()
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACTS] })
-      await queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.CONTACT_STATS],
-      })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACTS] }),
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.CONTACT, contactId],
+        }),
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACT_STATS] }),
+      ])
       toast.success('Contact edited successfully!')
     },
     onError: (error) => {
@@ -65,10 +74,12 @@ export const useDeleteContactMutation = () => {
       return await response.json()
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACTS] })
-      await queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.CONTACT_STATS],
-      })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACTS] }),
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.CONTACT_STATS],
+        }),
+      ])
       toast.success('Contact deleted successfully!')
     },
     onError: (error) => {

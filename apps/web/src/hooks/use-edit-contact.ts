@@ -37,17 +37,14 @@ export const useEditContact = (contact: Contact) => {
     setOpen(value)
   }
 
-  const editContact = useEditContactMutation()
+  const editContact = useEditContactMutation({ contactId: contact.id })
 
   const onSubmit = (data: NewContact) => {
-    editContact.mutate(
-      { id: contact.id, data },
-      {
-        onSuccess: () => {
-          setOpen(false)
-        },
+    editContact.mutate(data, {
+      onSuccess: () => {
+        setOpen(false)
       },
-    )
+    })
   }
 
   return {
