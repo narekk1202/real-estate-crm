@@ -54,12 +54,14 @@ function RouteComponent() {
 
       <PropertiesGrid properties={properties} isLoading={isLoading} />
 
-      <UniversalPagination
-        pagination={pagination}
-        totalCount={total}
-        isLoading={isLoading}
-        onPaginationChange={setPagination}
-      />
+      {properties.length > 0 && (
+        <UniversalPagination
+          pagination={pagination}
+          totalCount={total}
+          isLoading={isLoading}
+          onPaginationChange={setPagination}
+        />
+      )}
     </main>
   )
 }
