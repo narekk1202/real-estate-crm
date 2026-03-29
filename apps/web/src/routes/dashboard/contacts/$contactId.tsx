@@ -64,7 +64,7 @@ function ContactHeader({
                 </Badge>
               </div>
               <p className="text-muted-foreground text-sm">
-                Member since{' '}
+                Contact since{' '}
                 {new Date(contact.createdAt).toLocaleDateString('en-US', {
                   month: 'long',
                   year: 'numeric',

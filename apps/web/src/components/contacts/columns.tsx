@@ -42,7 +42,7 @@ export const columns: ColumnDef<SerializedContacts>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => new Date(row.original.createdAt).toDateString(),
+    cell: ({ row }) => <span className='ml-3'>{new Date(row.original.createdAt).toISOString().split('T')[0]}</span>,
   },
   {
     accessorKey: 'type',
