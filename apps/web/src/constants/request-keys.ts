@@ -16,4 +16,5 @@ export const MUTATION_KEYS = {
   EDIT_CONTACT: 'edit-contact',
   DELETE_CONTACT: 'delete-contact',
   NEW_PROPERTY: 'new-property',
+  IMAGE_UPLOAD: 'image-upload',
 }
