@@ -5,11 +5,13 @@ import {
 import type { ListingType, PropertyStatus, PropertyType } from '@crm/shared'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useDebounce } from 'use-debounce'
 
 const EMPTY_STATS = { total: 0, available: 0, reserved: 0, sold: 0, rented: 0 }
 
 export function usePropertiesPage() {
   const [searchText, setSearchText] = useState('')
+  const [search] = useDebounce(searchText, 300)
   const [type, setType] = useState<PropertyType>()
   const [status, setStatus] = useState<PropertyStatus>()
   const [listingType, setListingType] = useState<ListingType>()
@@ -20,8 +22,8 @@ export function usePropertiesPage() {
 
   const { data: properties, isPending } = useQuery(
     propertiesQueryOptions({
-      search: searchText,
       type,
+      search,
       status,
       listingType,
       page: pagination.pageIndex + 1,
