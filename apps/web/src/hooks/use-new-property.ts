@@ -1,3 +1,4 @@
+import { QUERY_KEYS } from '#/constants/request-keys'
 import { client } from '#/services/api'
 import { useImageUpload } from '#/services/mutations/images'
 import { useNewPropertyMutation } from '#/services/mutations/properties'
@@ -7,6 +8,7 @@ import {
   type NewPropertyInput,
 } from '@crm/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -20,6 +22,7 @@ export const useNewProperty = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const form = useForm<NewPropertyInput, unknown, NewProperty>({
     resolver: zodResolver(insertPropertySchema),
@@ -44,6 +47,15 @@ export const useNewProperty = () => {
     setOpen(false)
     setFiles([])
     form.reset()
+  }
+
+  const invalidateCache = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.PROPERTIES] }),
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.PROPERTIES_STATS],
+      }),
+    ])
   }
 
   const onSubmit = async (data: NewProperty) => {
@@ -73,12 +85,14 @@ export const useNewProperty = () => {
             },
           })
           resetState()
+          await invalidateCache()
           return
         }
       }
 
       toast.success('Property created successfully')
       resetState()
+      await invalidateCache()
     } catch (error) {
       if (newProperty.isSuccess) {
         toast.error('Property created but something went wrong with images')
