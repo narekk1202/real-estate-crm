@@ -15,11 +15,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardPropertiesRouteImport } from './routes/dashboard/properties'
 import { Route as DashboardDealsRouteImport } from './routes/dashboard/deals'
-import { Route as DashboardContactsRouteImport } from './routes/dashboard/contacts'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
 import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
+import { Route as DashboardContactsIndexRouteImport } from './routes/dashboard/contacts/index'
+import { Route as DashboardContactsContactIdRouteImport } from './routes/dashboard/contacts/$contactId'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
@@ -50,11 +51,6 @@ const DashboardDealsRoute = DashboardDealsRouteImport.update({
   path: '/deals',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const DashboardContactsRoute = DashboardContactsRouteImport.update({
-  id: '/contacts',
-  path: '/contacts',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
 const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -75,6 +71,17 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const DashboardContactsIndexRoute = DashboardContactsIndexRouteImport.update({
+  id: '/contacts/',
+  path: '/contacts/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardContactsContactIdRoute =
+  DashboardContactsContactIdRouteImport.update({
+    id: '/contacts/$contactId',
+    path: '/contacts/$contactId',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -83,10 +90,11 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
   '/reset-password': typeof AuthResetPasswordRoute
-  '/dashboard/contacts': typeof DashboardContactsRoute
   '/dashboard/deals': typeof DashboardDealsRoute
   '/dashboard/properties': typeof DashboardPropertiesRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/contacts/$contactId': typeof DashboardContactsContactIdRoute
+  '/dashboard/contacts/': typeof DashboardContactsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -94,10 +102,11 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
   '/reset-password': typeof AuthResetPasswordRoute
-  '/dashboard/contacts': typeof DashboardContactsRoute
   '/dashboard/deals': typeof DashboardDealsRoute
   '/dashboard/properties': typeof DashboardPropertiesRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/contacts/$contactId': typeof DashboardContactsContactIdRoute
+  '/dashboard/contacts': typeof DashboardContactsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -108,10 +117,11 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
-  '/dashboard/contacts': typeof DashboardContactsRoute
   '/dashboard/deals': typeof DashboardDealsRoute
   '/dashboard/properties': typeof DashboardPropertiesRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/contacts/$contactId': typeof DashboardContactsContactIdRoute
+  '/dashboard/contacts/': typeof DashboardContactsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -122,10 +132,11 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
-    | '/dashboard/contacts'
     | '/dashboard/deals'
     | '/dashboard/properties'
     | '/dashboard/'
+    | '/dashboard/contacts/$contactId'
+    | '/dashboard/contacts/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,10 +144,11 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
-    | '/dashboard/contacts'
     | '/dashboard/deals'
     | '/dashboard/properties'
     | '/dashboard'
+    | '/dashboard/contacts/$contactId'
+    | '/dashboard/contacts'
   id:
     | '__root__'
     | '/'
@@ -146,10 +158,11 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_auth/register'
     | '/_auth/reset-password'
-    | '/dashboard/contacts'
     | '/dashboard/deals'
     | '/dashboard/properties'
     | '/dashboard/'
+    | '/dashboard/contacts/$contactId'
+    | '/dashboard/contacts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -202,13 +215,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDealsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/contacts': {
-      id: '/dashboard/contacts'
-      path: '/contacts'
-      fullPath: '/dashboard/contacts'
-      preLoaderRoute: typeof DashboardContactsRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
     '/_auth/reset-password': {
       id: '/_auth/reset-password'
       path: '/reset-password'
@@ -237,6 +243,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/dashboard/contacts/': {
+      id: '/dashboard/contacts/'
+      path: '/contacts'
+      fullPath: '/dashboard/contacts/'
+      preLoaderRoute: typeof DashboardContactsIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/contacts/$contactId': {
+      id: '/dashboard/contacts/$contactId'
+      path: '/contacts/$contactId'
+      fullPath: '/dashboard/contacts/$contactId'
+      preLoaderRoute: typeof DashboardContactsContactIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
   }
 }
 
@@ -259,17 +279,19 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 interface DashboardRouteRouteChildren {
-  DashboardContactsRoute: typeof DashboardContactsRoute
   DashboardDealsRoute: typeof DashboardDealsRoute
   DashboardPropertiesRoute: typeof DashboardPropertiesRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardContactsContactIdRoute: typeof DashboardContactsContactIdRoute
+  DashboardContactsIndexRoute: typeof DashboardContactsIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardContactsRoute: DashboardContactsRoute,
   DashboardDealsRoute: DashboardDealsRoute,
   DashboardPropertiesRoute: DashboardPropertiesRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardContactsContactIdRoute: DashboardContactsContactIdRoute,
+  DashboardContactsIndexRoute: DashboardContactsIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(

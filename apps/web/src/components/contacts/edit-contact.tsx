@@ -1,5 +1,5 @@
 import { useEditContact } from '#/hooks/use-edit-contact'
-import type { Row } from '@tanstack/react-table'
+import type { Contact } from '@crm/shared'
 import { Edit } from 'lucide-react'
 import { Button, buttonVariants } from '../ui/button'
 import {
@@ -10,15 +10,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog'
-import type { SerializedContacts } from './columns'
 import ContactForm from './contact-form'
 
 interface EditContactProps {
-  row: Row<SerializedContacts>
+  contact: Contact
 }
 
-function EditContact({ row }: Readonly<EditContactProps>) {
-  const { form, open, isPending, setOpen, onSubmit } = useEditContact(row)
+function EditContact({ contact }: Readonly<EditContactProps>) {
+  const { form, open, isPending, setOpen, onSubmit } = useEditContact(contact)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -38,7 +37,6 @@ function EditContact({ row }: Readonly<EditContactProps>) {
         <ContactForm
           form={form}
           onSubmit={onSubmit}
-          isPending={isPending}
           actionButton={
             <Button type="submit" size="sm" loading={isPending}>
               Save Changes

@@ -1,5 +1,6 @@
 export const QUERY_KEYS = {
   CONTACTS: 'contacts',
+  CONTACT: 'contact',
   CONTACT_STATS: 'contact-stats',
 }
 

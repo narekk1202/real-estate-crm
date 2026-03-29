@@ -49,3 +49,20 @@ export const contactStatsQueryOptions = () => {
     },
   })
 }
+
+export const contactByIdQueryOptions = (id: string) => {
+  return queryOptions({
+    queryKey: [QUERY_KEYS.CONTACT, id],
+    queryFn: async () => {
+      const result = await client.api.contacts[':id'].$get({
+        param: { id },
+      })
+
+      if (!result.ok) {
+        throw new Error('Failed to fetch contact')
+      }
+
+      return await result.json()
+    },
+  })
+}

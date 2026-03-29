@@ -33,7 +33,6 @@ function AddNewContact() {
         <ContactForm
           form={form}
           onSubmit={onSubmit}
-          isPending={isPending}
           actionButton={
             <Button type="submit" size="sm" loading={isPending}>
               Add Contact

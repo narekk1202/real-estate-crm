@@ -1,6 +1,7 @@
 import { Badge } from '#/components/ui/badge'
 import { cn } from '#/lib/utils'
 import type { Contact } from '@crm/shared'
+import { Link } from '@tanstack/react-router'
 import { type ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from '../ui/button'
@@ -16,6 +17,15 @@ export const columns: ColumnDef<SerializedContacts>[] = [
   {
     accessorKey: 'firstName',
     header: 'First Name',
+    cell: ({ row }) => (
+      <Link
+        to="/dashboard/contacts/$contactId"
+        params={{ contactId: row.original.id }}
+        className="font-medium hover:underline"
+      >
+        {row.original.firstName}
+      </Link>
+    ),
   },
   {
     accessorKey: 'lastName',
@@ -87,8 +97,8 @@ export const columns: ColumnDef<SerializedContacts>[] = [
     header: 'Actions',
     cell: ({ row }) => (
       <div className="flex items-center space-x-2">
-        <EditContact row={row} />
-        <DeleteContact row={row} />
+        <EditContact contact={row.original} />
+        <DeleteContact contact={row.original} />
       </div>
     ),
   },

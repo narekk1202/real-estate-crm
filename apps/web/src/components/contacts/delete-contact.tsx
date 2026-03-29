@@ -1,5 +1,5 @@
 import { useDeleteContactMutation } from '#/services/mutations/contacts'
-import type { Row } from '@tanstack/react-table'
+import type { Contact } from '@crm/shared'
 import { Trash } from 'lucide-react'
 import {
   AlertDialog,
@@ -13,13 +13,13 @@ import {
   AlertDialogTrigger,
 } from '../ui/alert-dialog'
 import { Button } from '../ui/button'
-import type { SerializedContacts } from './columns'
 
 interface DeleteContactProps {
-  row: Row<SerializedContacts>
+  contact: Contact
+  onSuccess?: () => void
 }
 
-function DeleteContact({ row }: Readonly<DeleteContactProps>) {
+function DeleteContact({ contact, onSuccess }: Readonly<DeleteContactProps>) {
   const deleteContact = useDeleteContactMutation()
 
   return (
@@ -35,15 +35,15 @@ function DeleteContact({ row }: Readonly<DeleteContactProps>) {
           <AlertDialogDescription>
             Are you sure you want to delete{' '}
             <span className="font-medium">
-              {row.original.firstName} {row.original.lastName}
-            </span>
+              {contact.firstName} {contact.lastName}
+            </span>{' '}
             ? This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => deleteContact.mutate(row.original.id)}
+            onClick={() => deleteContact.mutate(contact.id, { onSuccess })}
             disabled={deleteContact.isPending}
           >
             Delete

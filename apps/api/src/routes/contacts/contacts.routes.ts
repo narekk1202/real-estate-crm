@@ -49,6 +49,18 @@ const routes = app
 			return c.json({ error: 'Failed to fetch contact stats' }, 500);
 		}
 	})
+	.get('/:id', async c => {
+		try {
+			const user = c.var.user;
+			const { id } = c.req.param();
+			const contact = await contactsService.getById(user.id, id);
+			if (!contact) return c.json({ error: 'Contact not found' }, 404);
+			return c.json(contact);
+		} catch (error) {
+			console.error('Error fetching contact:', error);
+			return c.json({ error: 'Failed to fetch contact' }, 500);
+		}
+	})
 	.post('/', zValidator('json', insertContactsSchema), async c => {
 		try {
 			const user = c.var.user;
@@ -71,7 +83,8 @@ const routes = app
 			console.error('Error updating contact:', error);
 			return c.json({ error: 'Failed to update contact' }, 500);
 		}
-	}).delete('/:id', async c => {
+	})
+	.delete('/:id', async c => {
 		try {
 			const user = c.var.user;
 			const { id } = c.req.param();

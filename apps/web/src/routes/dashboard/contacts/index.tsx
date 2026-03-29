@@ -1,14 +1,12 @@
 import AddNewContact from '#/components/contacts/add-new-contact'
 import { columns } from '#/components/contacts/columns'
 import SubHeader from '#/components/contacts/sub-header'
-import { Button } from '#/components/ui/button'
 import { DataTable } from '#/components/ui/data-table'
 import { Separator } from '#/components/ui/separator'
 import { useContactsPage } from '#/hooks/use-contacts-page'
 import { createFileRoute } from '@tanstack/react-router'
-import { Plus } from 'lucide-react'
 
-export const Route = createFileRoute('/dashboard/contacts')({
+export const Route = createFileRoute('/dashboard/contacts/')({
   component: RouteComponent,
 })
 
