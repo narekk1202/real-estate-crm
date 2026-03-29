@@ -1,6 +1,6 @@
 import { integer, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
-import { user } from './index.js';
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { contacts, user } from './index.js';
 
 export const propertyType = pgEnum('property_type', [
 	'APARTMENT',
@@ -41,6 +41,9 @@ export const properties = pgTable('properties', {
 	bedrooms: integer('bedrooms'),
 	bathrooms: integer('bathrooms'),
 	areaM2: integer('area_m2'),
+	ownerId: text('owner_id').references(() => contacts.id, {
+		onDelete: 'set null',
+	}),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
 	updatedAt: timestamp('updated_at')
 		.defaultNow()
