@@ -3,6 +3,7 @@ import {
   propertyStatusValues,
   propertyTypeValues,
   type NewProperty,
+  type NewPropertyInput,
 } from '@crm/shared'
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import FieldError from '../errors/field-error'
@@ -22,10 +23,13 @@ import ContactSelect from './contact-select'
 import ImageUploader from './image-uploader'
 
 interface PropertyFormProps {
-  form: UseFormReturn<NewProperty>
+  form: UseFormReturn<NewPropertyInput, unknown, NewProperty>
   actionButton: React.ReactNode
   onSubmit: (data: NewProperty) => void | Promise<void>
 }
+
+const toOptionalNumber = (value: unknown) =>
+  value === '' ? undefined : Number(value)
 
 function PropertyForm({
   form,
@@ -187,7 +191,7 @@ function PropertyForm({
             <span className="text-muted-foreground text-xs">(optional)</span>
           </Label>
           <Input
-            {...form.register('bedrooms', { valueAsNumber: true })}
+            {...form.register('bedrooms', { setValueAs: toOptionalNumber })}
             id="bedrooms"
             type="number"
             min={1}
@@ -200,7 +204,7 @@ function PropertyForm({
             <span className="text-muted-foreground text-xs">(optional)</span>
           </Label>
           <Input
-            {...form.register('bathrooms', { valueAsNumber: true })}
+            {...form.register('bathrooms', { setValueAs: toOptionalNumber })}
             id="bathrooms"
             type="number"
             min={1}
@@ -213,7 +217,7 @@ function PropertyForm({
             <span className="text-muted-foreground text-xs">(optional)</span>
           </Label>
           <Input
-            {...form.register('areaM2', { valueAsNumber: true })}
+            {...form.register('areaM2', { setValueAs: toOptionalNumber })}
             id="areaM2"
             type="number"
             min={1}

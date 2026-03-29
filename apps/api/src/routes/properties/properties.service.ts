@@ -75,7 +75,8 @@ class PropertiesService {
 				.leftJoin(imageAgg, eq(properties.id, imageAgg.propertyId))
 				.where(and(...conditions))
 				.limit(pageSize)
-				.offset(offset),
+				.offset(offset)
+				.orderBy(sql`${properties.createdAt} DESC`),
 			db
 				.select({ total: count() })
 				.from(properties)

@@ -37,7 +37,7 @@ export const properties = pgTable('properties', {
 	type: propertyType('type').default('APARTMENT').notNull(),
 	listingType: listingType('listing_type').default('SALE').notNull(),
 	status: propertyStatus('status').default('AVAILABLE').notNull(),
-	price: text('price').notNull(),
+	price: integer('price').notNull(),
 	bedrooms: integer('bedrooms'),
 	bathrooms: integer('bathrooms'),
 	areaM2: integer('area_m2'),

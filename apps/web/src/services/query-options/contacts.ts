@@ -56,6 +56,7 @@ export const contactsInfiniteQueryOptions = (search?: string) =>
       const loaded = allPages.reduce((sum, p) => sum + p.data.length, 0)
       return loaded < lastPage.total ? allPages.length + 1 : undefined
     },
+    placeholderData: keepPreviousData,
   })
 
 export const contactsStatsQueryOptions = () => {

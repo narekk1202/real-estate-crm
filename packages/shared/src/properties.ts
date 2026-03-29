@@ -41,21 +41,22 @@ export interface PropertyStats {
 }
 
 export const insertPropertySchema = z.object({
-	title: z.string('Title is required').min(1),
+	title: z.string().min(1, 'Title is required'),
 	description: z.string().nullable().optional(),
-	address: z.string('Address is required').min(1),
-	city: z.string('City is required').min(1),
-	country: z.string('Country is required').min(1),
+	address: z.string().min(1, 'Address is required'),
+	city: z.string().min(1, 'City is required'),
+	country: z.string().min(1, 'Country is required'),
 	type: z.enum(propertyTypeValues),
 	listingType: z.enum(listingTypeValues),
 	status: z.enum(propertyStatusValues),
-	price: z.string('Price is required').min(1),
-	bedrooms: z.number().int().positive().nullable().optional(),
-	bathrooms: z.number().int().positive().nullable().optional(),
-	areaM2: z.number().int().positive().nullable().optional(),
+	price: z.coerce.number('Price must be number').min(1, 'Price is required'),
+	bedrooms: z.number().positive('Bedrooms must be positive').nullable().optional(),
+	bathrooms: z.number().int().positive('Bathrooms must be positive').nullable().optional(),
+	areaM2: z.number().int().positive('Area must be positive').nullable().optional(),
 	ownerId: z.uuid().nullable().optional(),
 });
 
+export type NewPropertyInput = z.input<typeof insertPropertySchema>;
 export type NewProperty = z.infer<typeof insertPropertySchema>;
 
 export interface PropertyImage {
