@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from '../ui/select'
 import { Textarea } from '../ui/textarea'
+import ImageUploader from './image-uploader'
 
 interface PropertyFormProps {
   form: UseFormReturn<NewProperty>
@@ -205,6 +206,8 @@ function PropertyForm({
           />
         </div>
       </div>
+
+			<ImageUploader />
 
       <div className="flex justify-end gap-2 pt-2">
         <DialogTrigger asChild>
