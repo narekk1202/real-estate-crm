@@ -58,9 +58,22 @@ export const insertPropertySchema = z.object({
 
 export type NewProperty = z.infer<typeof insertPropertySchema>;
 
+export interface PropertyImage {
+	id: string;
+	url: string;
+	order: number;
+}
+
+export interface PropertyAgent {
+	id: string;
+	name: string;
+}
+
 export type Property = NewProperty & {
 	id: string;
 	userId: string;
 	createdAt: string;
 	updatedAt: string;
+	agent: PropertyAgent | null;
+	images: PropertyImage[];
 };

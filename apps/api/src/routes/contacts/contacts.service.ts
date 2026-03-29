@@ -8,18 +8,20 @@ class ContactsService {
 		const { search, status, type, page = 1, pageSize = 10 } = filters;
 		const offset = (page - 1) * pageSize;
 
-		const conditions = [
-			eq(contacts.userId, userId),
-			search &&
+		const conditions: SQL[] = [eq(contacts.userId, userId)];
+
+		if (search) {
+			conditions.push(
 				or(
 					ilike(contacts.firstName, `%${search}%`),
 					ilike(contacts.lastName, `%${search}%`),
 					ilike(contacts.email, `%${search}%`),
 					ilike(contacts.phone, `%${search}%`),
-				),
-			type && eq(contacts.type, type),
-			status && eq(contacts.status, status),
-		].filter(Boolean) as SQL[];
+				)!,
+			);
+		}
+		if (type) conditions.push(eq(contacts.type, type));
+		if (status) conditions.push(eq(contacts.status, status));
 
 		const [data, [{ total }]] = await Promise.all([
 			db
