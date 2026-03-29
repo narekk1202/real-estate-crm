@@ -1,11 +1,10 @@
+import AddNewProperty from '#/components/properties/add-new-property'
 import PropertiesGrid from '#/components/properties/properties-grid'
 import PropertiesSubHeader from '#/components/properties/properties-sub-header'
 import UniversalPagination from '#/components/shared/universal-pagination'
-import { Button } from '#/components/ui/button'
 import { Separator } from '#/components/ui/separator'
 import { usePropertiesPage } from '#/hooks/use-properties-page'
 import { createFileRoute } from '@tanstack/react-router'
-import { Plus } from 'lucide-react'
 
 export const Route = createFileRoute('/dashboard/properties')({
   component: RouteComponent,
@@ -35,10 +34,7 @@ function RouteComponent() {
             Browse, manage, and track all your real estate listings.
           </p>
         </div>
-        <Button size="sm">
-          <Plus className="mr-1 size-4" />
-          Add property
-        </Button>
+        <AddNewProperty />
       </div>
 
       <Separator />
