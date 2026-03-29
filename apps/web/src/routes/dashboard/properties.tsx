@@ -1,5 +1,6 @@
 import PropertiesGrid from '#/components/properties/properties-grid'
 import PropertiesSubHeader from '#/components/properties/properties-sub-header'
+import UniversalPagination from '#/components/shared/universal-pagination'
 import { Button } from '#/components/ui/button'
 import { Separator } from '#/components/ui/separator'
 import { usePropertiesPage } from '#/hooks/use-properties-page'
@@ -15,6 +16,9 @@ function RouteComponent() {
     stats,
     properties,
     isLoading,
+    total,
+    pagination,
+    setPagination,
     searchText,
     onSearchChange,
     onTypeChange,
@@ -49,6 +53,13 @@ function RouteComponent() {
       />
 
       <PropertiesGrid properties={properties} isLoading={isLoading} />
+
+      <UniversalPagination
+        pagination={pagination}
+        totalCount={total}
+        isLoading={isLoading}
+        onPaginationChange={setPagination}
+      />
     </main>
   )
 }

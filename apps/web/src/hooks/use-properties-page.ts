@@ -4,6 +4,7 @@ import {
 } from '#/services/query-options/properties'
 import type { ListingType, PropertyStatus, PropertyType } from '@crm/shared'
 import { useQuery } from '@tanstack/react-query'
+import type { PaginationState } from '@tanstack/react-table'
 import { useState } from 'react'
 import { useDebounce } from 'use-debounce'
 
@@ -15,9 +16,9 @@ export function usePropertiesPage() {
   const [type, setType] = useState<PropertyType>()
   const [status, setStatus] = useState<PropertyStatus>()
   const [listingType, setListingType] = useState<ListingType>()
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 6,
   })
 
   const { data: properties, isPending } = useQuery(
@@ -57,7 +58,10 @@ export function usePropertiesPage() {
     searchText,
     stats: stats ?? EMPTY_STATS,
     properties: properties?.data ?? [],
+    total: properties?.total ?? 0,
     isLoading: isPending,
+    pagination,
+    setPagination,
     onSearchChange,
     onTypeChange,
     onListingTypeChange,

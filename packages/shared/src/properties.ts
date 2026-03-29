@@ -53,6 +53,7 @@ export const insertPropertySchema = z.object({
 	bedrooms: z.number().int().positive().nullable().optional(),
 	bathrooms: z.number().int().positive().nullable().optional(),
 	areaM2: z.number().int().positive().nullable().optional(),
+	ownerId: z.uuid().nullable().optional(),
 });
 
 export type NewProperty = z.infer<typeof insertPropertySchema>;

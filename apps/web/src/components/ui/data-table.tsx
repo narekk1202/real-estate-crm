@@ -1,11 +1,4 @@
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '#/components/ui/select'
-import {
   Table,
   TableBody,
   TableCell,
@@ -24,7 +17,7 @@ import {
   type SortingState,
 } from '@tanstack/react-table'
 import { useState } from 'react'
-import { Button } from './button'
+import UniversalPagination from '../shared/universal-pagination'
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50] as const
 
@@ -68,9 +61,6 @@ export function DataTable<TData, TValue>({
   })
 
   const rows = table.getRowModel().rows
-  const { pageIndex, pageSize } = pagination
-  const firstRow = totalCount === 0 ? 0 : pageIndex * pageSize + 1
-  const lastRow = Math.min((pageIndex + 1) * pageSize, totalCount)
 
   const renderTableBody = () => {
     if (isLoading) {
@@ -132,56 +122,13 @@ export function DataTable<TData, TValue>({
           <TableBody>{renderTableBody()}</TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between py-4">
-        <div className="flex items-center gap-4">
-          <p className="text-sm text-muted-foreground">
-            {totalCount === 0
-              ? 'No results'
-              : `Showing ${firstRow}–${lastRow} of ${totalCount}`}
-          </p>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Rows per page</span>
-            <Select
-              value={String(pageSize)}
-              onValueChange={(value) =>
-                onPaginationChange({ pageIndex: 0, pageSize: Number(value) })
-              }
-            >
-              <SelectTrigger className="h-8 w-17">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {PAGE_SIZE_OPTIONS.map((size) => (
-                  <SelectItem key={size} value={String(size)}>
-                    {size}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage() || isLoading}
-          >
-            Previous
-          </Button>
-          <span className="text-sm text-muted-foreground">
-            Page {pageIndex + 1} of {pageCount || 1}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage() || isLoading}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      <UniversalPagination
+        isLoading={isLoading}
+        pagination={pagination}
+        totalCount={totalCount}
+        pageSizeOptions={[10, 25, 50]}
+        onPaginationChange={onPaginationChange}
+      />
     </div>
   )
 }
