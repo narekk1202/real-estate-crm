@@ -13,6 +13,8 @@ import { db } from '../../db/index.js';
 import { contacts } from '../../db/schemas/contacts.js';
 import { properties } from '../../db/schemas/properties.js';
 import { propertyImages } from '../../db/schemas/property_images.js';
+import { env } from '../../env.js';
+import { storageService } from '../storage/storage.service.js';
 
 class PropertiesService {
 	async getAll(userId: string, filters: GetAllPropertiesFilters) {
@@ -145,7 +147,7 @@ class PropertiesService {
 
 	async deleteImage(imageId: string, userId: string) {
 		const [image] = await db
-			.select({ id: propertyImages.id })
+			.select({ id: propertyImages.id, url: propertyImages.url })
 			.from(propertyImages)
 			.innerJoin(properties, eq(propertyImages.propertyId, properties.id))
 			.where(
@@ -155,6 +157,34 @@ class PropertiesService {
 		if (!image) throw new Error('Image not found or access denied');
 
 		await db.delete(propertyImages).where(eq(propertyImages.id, imageId));
+
+		const key = image.url.replace(`${env.R2_PUBLIC_URL}/`, '');
+		await storageService.deleteFile(key);
+	}
+
+	async delete(userId: string, propertyId: string) {
+		const images = await db
+			.select({ url: propertyImages.url })
+			.from(propertyImages)
+			.innerJoin(properties, eq(propertyImages.propertyId, properties.id))
+			.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)));
+
+		const [deleted] = await db
+			.delete(properties)
+			.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)))
+			.returning();
+
+		if (!deleted) throw new Error('Property not found or access denied');
+
+		if (images.length > 0) {
+			await Promise.all(
+				images.map(({ url }) =>
+					storageService.deleteFile(url.replace(`${env.R2_PUBLIC_URL}/`, '')),
+				),
+			);
+		}
+
+		return deleted;
 	}
 }
 

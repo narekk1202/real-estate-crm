@@ -7,6 +7,7 @@ import { cn } from '#/lib/utils'
 import { formatPrice, getInitials } from '#/utils/property-card'
 import type { Property } from '@crm/shared'
 import { Bath, Bed, Home, Maximize2 } from 'lucide-react'
+import DeleteProperty from './delete-property'
 import EditProperty from './edit-property'
 
 interface PropertyCardProps {
@@ -109,6 +110,7 @@ function PropertyCard({ property, onView }: Readonly<PropertyCardProps>) {
               View
             </Button>
             <EditProperty property={property} />
+            <DeleteProperty property={property} />
           </div>
         </div>
       </CardContent>

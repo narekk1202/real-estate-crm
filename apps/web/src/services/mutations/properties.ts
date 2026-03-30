@@ -37,6 +37,33 @@ export const useDeletePropertyImageMutation = () => {
   })
 }
 
+export const useDeletePropertyMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: [MUTATION_KEYS.DELETE_PROPERTY],
+    mutationFn: async (id: string) => {
+      const response = await client.api.properties[':id'].$delete({
+        param: { id },
+      })
+      if (!response.ok) throw new Error('Failed to delete property')
+      return await response.json()
+    },
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.PROPERTIES] }),
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.PROPERTIES_STATS],
+        }),
+      ])
+      toast.success('Property deleted successfully!')
+    },
+    onError: (error) => {
+      console.error('Error deleting property:', error)
+      toast.error(`Failed to delete property: ${error.message}`)
+    },
+  })
+}
+
 export const useEditPropertyMutation = ({
   propertyId,
 }: {

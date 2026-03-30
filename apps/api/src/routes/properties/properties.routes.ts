@@ -105,6 +105,17 @@ const routes = app
 			console.error('Error deleting property image:', error);
 			return c.json({ error: 'Failed to delete property image' }, 500);
 		}
+	})
+	.delete('/:id', async c => {
+		try {
+			const user = c.var.user;
+			const { id } = c.req.param();
+			const deleted = await propertiesService.delete(user.id, id);
+			return c.json(deleted);
+		} catch (error) {
+			console.error('Error deleting property:', error);
+			return c.json({ error: 'Failed to delete property' }, 500);
+		}
 	});
 
 export default routes;
