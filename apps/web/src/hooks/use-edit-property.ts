@@ -1,13 +1,19 @@
+import { QUERY_KEYS } from '#/constants/request-keys'
 import { client } from '#/services/api'
 import { useImageUpload } from '#/services/mutations/images'
-import { useEditPropertyMutation } from '#/services/mutations/properties'
+import {
+  useDeletePropertyImageMutation,
+  useEditPropertyMutation,
+} from '#/services/mutations/properties'
 import {
   insertPropertySchema,
   type NewProperty,
   type NewPropertyInput,
   type Property,
+  type PropertyImage,
 } from '@crm/shared'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -15,9 +21,12 @@ import { toast } from 'sonner'
 export const useEditProperty = (property: Property) => {
   const [open, setOpen] = useState(false)
   const [files, setFiles] = useState<File[]>([])
+  const [deletedImageIds, setDeletedImageIds] = useState<string[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const queryClient = useQueryClient()
   const editProperty = useEditPropertyMutation({ propertyId: property.id })
+  const deleteImage = useDeletePropertyImageMutation()
   const imageUpload = useImageUpload()
 
   const form = useForm<NewPropertyInput, unknown, NewProperty>({
@@ -57,14 +66,31 @@ export const useEditProperty = (property: Property) => {
         ownerId: property.ownerId ?? undefined,
       })
       setFiles([])
+      setDeletedImageIds([])
     }
     setOpen(value)
   }
+
+  const onDeleteImage = (imageId: string) => {
+    setDeletedImageIds((prev) => [...prev, imageId])
+  }
+
+  const existingImages: PropertyImage[] = property.images.filter(
+    (img) => !deletedImageIds.includes(img.id),
+  )
 
   const onSubmit = async (data: NewProperty) => {
     setIsSubmitting(true)
     try {
       await editProperty.mutateAsync(data)
+
+      if (deletedImageIds.length > 0) {
+        await Promise.all(
+          deletedImageIds.map((imageId) =>
+            deleteImage.mutateAsync({ propertyId: property.id, imageId }),
+          ),
+        )
+      }
 
       if (files.length > 0) {
         const urls = await imageUpload.mutateAsync({
@@ -82,8 +108,11 @@ export const useEditProperty = (property: Property) => {
         }
       }
 
+      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.PROPERTIES] })
+
       setOpen(false)
       setFiles([])
+      setDeletedImageIds([])
     } catch (error) {
       console.error(error)
     } finally {
@@ -95,6 +124,8 @@ export const useEditProperty = (property: Property) => {
     form,
     files,
     setFiles,
+    existingImages,
+    onDeleteImage,
     open,
     isPending: isSubmitting,
     setOpen: handleOpenChange,

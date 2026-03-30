@@ -16,6 +16,27 @@ export const useNewPropertyMutation = () => {
   })
 }
 
+export const useDeletePropertyImageMutation = () => {
+  return useMutation({
+    mutationKey: [MUTATION_KEYS.DELETE_PROPERTY_IMAGE],
+    mutationFn: async ({
+      propertyId,
+      imageId,
+    }: {
+      propertyId: string
+      imageId: string
+    }) => {
+      const response = await client.api.properties[':id'].images[
+        ':imageId'
+      ].$delete({
+        param: { id: propertyId, imageId },
+      })
+      if (!response.ok) throw new Error('Failed to delete image')
+      return await response.json()
+    },
+  })
+}
+
 export const useEditPropertyMutation = ({
   propertyId,
 }: {

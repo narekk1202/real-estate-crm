@@ -142,6 +142,20 @@ class PropertiesService {
 			.insert(propertyImages)
 			.values(urls.map((url, order) => ({ propertyId, url, order })));
 	}
+
+	async deleteImage(imageId: string, userId: string) {
+		const [image] = await db
+			.select({ id: propertyImages.id })
+			.from(propertyImages)
+			.innerJoin(properties, eq(propertyImages.propertyId, properties.id))
+			.where(
+				and(eq(propertyImages.id, imageId), eq(properties.userId, userId)),
+			);
+
+		if (!image) throw new Error('Image not found or access denied');
+
+		await db.delete(propertyImages).where(eq(propertyImages.id, imageId));
+	}
 }
 
 export const propertiesService = new PropertiesService();

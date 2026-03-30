@@ -4,7 +4,9 @@ import {
   propertyTypeValues,
   type NewProperty,
   type NewPropertyInput,
+  type PropertyImage,
 } from '@crm/shared'
+import { X } from 'lucide-react'
 import { Controller, type UseFormReturn } from 'react-hook-form'
 import FieldError from '../errors/field-error'
 import { Button } from '../ui/button'
@@ -28,6 +30,8 @@ interface PropertyFormProps {
   onSubmit: (data: NewProperty) => void | Promise<void>
   files: File[]
   onFilesChange: (files: File[]) => void
+  existingImages?: PropertyImage[]
+  onDeleteImage?: (id: string) => void
 }
 
 const toOptionalNumber = (value: unknown) =>
@@ -39,6 +43,8 @@ function PropertyForm({
   actionButton,
   files,
   onFilesChange,
+  existingImages,
+  onDeleteImage,
 }: Readonly<PropertyFormProps>) {
   return (
     <form
@@ -231,6 +237,30 @@ function PropertyForm({
       </div>
 
       <ImageUploader files={files} onFilesChange={onFilesChange} />
+
+      {existingImages && existingImages.length > 0 && (
+        <div className="grid gap-1.5">
+          <Label>Current Images</Label>
+          <div className="flex flex-wrap gap-2">
+            {existingImages.map((img) => (
+              <div key={img.id} className="group relative size-20">
+                <img
+                  src={img.url}
+                  alt="Property"
+                  className="size-20 rounded-md border object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => onDeleteImage?.(img.id)}
+                  className="absolute -right-1.5 -top-1.5 hidden size-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground group-hover:flex"
+                >
+                  <X className="size-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex justify-end gap-2 pt-2">
         <DialogTrigger asChild>

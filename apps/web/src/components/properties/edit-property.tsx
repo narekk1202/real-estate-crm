@@ -17,8 +17,17 @@ interface EditPropertyProps {
 }
 
 function EditProperty({ property }: Readonly<EditPropertyProps>) {
-  const { form, files, setFiles, open, isPending, setOpen, onSubmit } =
-    useEditProperty(property)
+  const {
+    form,
+    files,
+    setFiles,
+    existingImages,
+    onDeleteImage,
+    open,
+    isPending,
+    setOpen,
+    onSubmit,
+  } = useEditProperty(property)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -40,6 +49,8 @@ function EditProperty({ property }: Readonly<EditPropertyProps>) {
           onSubmit={onSubmit}
           files={files}
           onFilesChange={setFiles}
+          existingImages={existingImages}
+          onDeleteImage={onDeleteImage}
           actionButton={
             <Button type="submit" size="sm" loading={isPending}>
               Save Changes

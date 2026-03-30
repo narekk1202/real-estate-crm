@@ -94,7 +94,18 @@ const routes = app
 				return c.json({ error: 'Failed to add property images' }, 500);
 			}
 		},
-	);
+	)
+	.delete('/:id/images/:imageId', async c => {
+		try {
+			const user = c.var.user;
+			const { imageId } = c.req.param();
+			await propertiesService.deleteImage(imageId, user.id);
+			return c.json({ success: true });
+		} catch (error) {
+			console.error('Error deleting property image:', error);
+			return c.json({ error: 'Failed to delete property image' }, 500);
+		}
+	});
 
 export default routes;
 export type PropertiesRoutes = typeof routes;

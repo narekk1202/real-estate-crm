@@ -18,5 +18,6 @@ export const MUTATION_KEYS = {
   DELETE_CONTACT: 'delete-contact',
   NEW_PROPERTY: 'new-property',
   EDIT_PROPERTY: 'edit-property',
+  DELETE_PROPERTY_IMAGE: 'delete-property-image',
   IMAGE_UPLOAD: 'image-upload',
 }
