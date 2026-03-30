@@ -67,6 +67,18 @@ const routes = app
 			return c.json({ error: 'Failed to create property' }, 500);
 		}
 	})
+	.put('/:id', zValidator('json', insertPropertySchema), async c => {
+		try {
+			const user = c.var.user;
+			const data = c.req.valid('json');
+			const { id } = c.req.param();
+			const updatedProperty = await propertiesService.update(user.id, id, data);
+			return c.json(updatedProperty);
+		} catch (error) {
+			console.error('Error updating property:', error);
+			return c.json({ error: 'Failed to update property' }, 500);
+		}
+	})
 	.post(
 		'/:id/images',
 		zValidator('json', z.object({ urls: z.array(z.string()) })),

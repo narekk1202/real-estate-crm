@@ -120,6 +120,16 @@ class PropertiesService {
 			.returning();
 	}
 
+	async update(userId: string, propertyId: string, data: NewProperty) {
+		const [updatedProperty] = await db
+			.update(properties)
+			.set(data)
+			.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)))
+			.returning();
+
+		return updatedProperty;
+	}
+
 	async addImages(propertyId: string, userId: string, urls: string[]) {
 		const [property] = await db
 			.select({ id: properties.id })

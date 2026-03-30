@@ -7,18 +7,14 @@ import { cn } from '#/lib/utils'
 import { formatPrice, getInitials } from '#/utils/property-card'
 import type { Property } from '@crm/shared'
 import { Bath, Bed, Home, Maximize2 } from 'lucide-react'
+import EditProperty from './edit-property'
 
 interface PropertyCardProps {
   property: Property
   onView?: (property: Property) => void
-  onEdit?: (property: Property) => void
 }
 
-function PropertyCard({
-  property,
-  onView,
-  onEdit,
-}: Readonly<PropertyCardProps>) {
+function PropertyCard({ property, onView }: Readonly<PropertyCardProps>) {
   const status = statusConfig[property.status]
   const listing = listingConfig[property.listingType]
 
@@ -112,13 +108,7 @@ function PropertyCard({
             >
               View
             </Button>
-            <Button
-              size="sm"
-              variant="default"
-              onClick={() => onEdit?.(property)}
-            >
-              Edit
-            </Button>
+            <EditProperty property={property} />
           </div>
         </div>
       </CardContent>

@@ -6,14 +6,12 @@ interface PropertiesGridProps {
   properties: Property[]
   isLoading?: boolean
   onView?: (property: Property) => void
-  onEdit?: (property: Property) => void
 }
 
 function PropertiesGrid({
   properties,
   isLoading,
   onView,
-  onEdit,
 }: Readonly<PropertiesGridProps>) {
   if (isLoading) {
     return (
@@ -46,12 +44,7 @@ function PropertiesGrid({
   return (
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {properties.map((property) => (
-        <PropertyCard
-          key={property.id}
-          property={property}
-          onView={onView}
-          onEdit={onEdit}
-        />
+        <PropertyCard key={property.id} property={property} onView={onView} />
       ))}
     </div>
   )

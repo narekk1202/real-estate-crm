@@ -9,8 +9,8 @@ export function getInitials(name: string) {
 		.slice(0, 2)
 }
 
-export function formatPrice(price: string, listingType: ListingType) {
-	const numericPrice = Number.parseFloat(price)
+export function formatPrice(price: string | number, listingType: ListingType) {
+	const numericPrice = Number.parseFloat(price.toString())
 	const formatted = Number.isNaN(numericPrice)
 		? price
 		: new Intl.NumberFormat('en-US', {

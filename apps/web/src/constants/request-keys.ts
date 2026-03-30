@@ -3,6 +3,7 @@ export const QUERY_KEYS = {
   CONTACT: 'contact',
   CONTACT_STATS: 'contact-stats',
   PROPERTIES: 'properties',
+  PROPERTY: 'property',
   PROPERTIES_STATS: 'properties-stats',
 }
 
@@ -16,5 +17,6 @@ export const MUTATION_KEYS = {
   EDIT_CONTACT: 'edit-contact',
   DELETE_CONTACT: 'delete-contact',
   NEW_PROPERTY: 'new-property',
+  EDIT_PROPERTY: 'edit-property',
   IMAGE_UPLOAD: 'image-upload',
 }
