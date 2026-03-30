@@ -122,6 +122,48 @@ class PropertiesService {
 			.returning();
 	}
 
+	async getById(userId: string, propertyId: string) {
+		const imageAgg = db
+			.select({
+				propertyId: propertyImages.propertyId,
+				images: sql<{ id: string; url: string; order: number }[]>`
+					coalesce(
+						json_agg(
+							json_build_object('id', ${propertyImages.id}, 'url', ${propertyImages.url}, 'order', ${propertyImages.order})
+							ORDER BY ${propertyImages.order}
+						),
+						'[]'::json
+					)
+				`.as('images'),
+			})
+			.from(propertyImages)
+			.groupBy(propertyImages.propertyId)
+			.as('image_agg');
+
+		const [row] = await db
+			.select({
+				...getTableColumns(properties),
+				agent: {
+					id: contacts.id,
+					name: sql<string>`${contacts.firstName} || ' ' || ${contacts.lastName}`,
+				},
+				images: imageAgg.images,
+			})
+			.from(properties)
+			.leftJoin(contacts, eq(properties.ownerId, contacts.id))
+			.leftJoin(imageAgg, eq(properties.id, imageAgg.propertyId))
+			.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)));
+
+		if (!row) return null;
+
+		const { agent, images, ...property } = row;
+		return {
+			...property,
+			agent: property.ownerId ? agent : null,
+			images: images ?? [],
+		};
+	}
+
 	async update(userId: string, propertyId: string, data: NewProperty) {
 		const [updatedProperty] = await db
 			.update(properties)

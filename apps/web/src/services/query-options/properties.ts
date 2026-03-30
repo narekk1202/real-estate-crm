@@ -47,3 +47,18 @@ export const propertiesStatsQueryOptions = () => {
     },
   })
 }
+
+export const propertyByIdQueryOptions = (id: string) => {
+  return queryOptions({
+    queryKey: [QUERY_KEYS.PROPERTY, id],
+    queryFn: async () => {
+      const result = await client.api.properties[':id'].$get({
+        param: { id },
+      })
+
+      if (!result.ok) throw new Error('Failed to fetch property')
+
+      return await result.json()
+    },
+  })
+}

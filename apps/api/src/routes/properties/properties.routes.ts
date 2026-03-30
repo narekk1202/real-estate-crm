@@ -56,6 +56,18 @@ const routes = app
 			return c.json({ error: 'Failed to fetch property stats' }, 500);
 		}
 	})
+	.get('/:id', async c => {
+		try {
+			const user = c.var.user;
+			const { id } = c.req.param();
+			const property = await propertiesService.getById(user.id, id);
+			if (!property) return c.json({ error: 'Property not found' }, 404);
+			return c.json(property);
+		} catch (error) {
+			console.error('Error fetching property:', error);
+			return c.json({ error: 'Failed to fetch property' }, 500);
+		}
+	})
 	.post('/', zValidator('json', insertPropertySchema), async c => {
 		try {
 			const user = c.var.user;

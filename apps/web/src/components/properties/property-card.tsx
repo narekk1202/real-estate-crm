@@ -1,21 +1,21 @@
 import { Avatar, AvatarFallback } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
-import { Button } from '#/components/ui/button'
+import { buttonVariants } from '#/components/ui/button'
 import { Card, CardContent } from '#/components/ui/card'
 import { listingConfig, statusConfig } from '#/constants/property-card'
 import { cn } from '#/lib/utils'
 import { formatPrice, getInitials } from '#/utils/property-card'
 import type { Property } from '@crm/shared'
+import { Link } from '@tanstack/react-router'
 import { Bath, Bed, Home, Maximize2 } from 'lucide-react'
 import DeleteProperty from './delete-property'
 import EditProperty from './edit-property'
 
 interface PropertyCardProps {
   property: Property
-  onView?: (property: Property) => void
 }
 
-function PropertyCard({ property, onView }: Readonly<PropertyCardProps>) {
+function PropertyCard({ property }: Readonly<PropertyCardProps>) {
   const status = statusConfig[property.status]
   const listing = listingConfig[property.listingType]
 
@@ -102,13 +102,13 @@ function PropertyCard({ property, onView }: Readonly<PropertyCardProps>) {
           )}
 
           <div className="flex items-center gap-1.5">
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => onView?.(property)}
+            <Link
+              to="/dashboard/properties/$propertyId"
+              params={{ propertyId: property.id }}
+              className={buttonVariants({ size: 'sm', variant: 'outline' })}
             >
               View
-            </Button>
+            </Link>
             <EditProperty property={property} />
             <DeleteProperty property={property} />
           </div>

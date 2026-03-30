@@ -108,7 +108,12 @@ export const useEditProperty = (property: Property) => {
         }
       }
 
-      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.PROPERTIES] })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.PROPERTIES] }),
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.PROPERTY, property.id],
+        }),
+      ])
 
       setOpen(false)
       setFiles([])
