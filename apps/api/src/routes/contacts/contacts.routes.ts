@@ -65,7 +65,7 @@ const routes = app
 			const user = c.var.user;
 			const data = c.req.valid('json');
 			const newContact = await contactsService.create(user.id, data);
-			return c.json(newContact);
+			return c.json(newContact, 201);
 		} catch (error) {
 			console.error('Error creating contact:', error);
 			return c.json({ error: 'Failed to create contact' }, 500);

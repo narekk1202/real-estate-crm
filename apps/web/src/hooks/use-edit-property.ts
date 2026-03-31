@@ -120,6 +120,7 @@ export const useEditProperty = (property: Property) => {
       setDeletedImageIds([])
     } catch (error) {
       console.error(error)
+      toast.error('Failed to update property')
     } finally {
       setIsSubmitting(false)
     }

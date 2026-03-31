@@ -17,12 +17,17 @@ import { toast } from 'sonner'
 interface ImageUploaderProps {
   files: File[]
   onFilesChange: (files: File[]) => void
+  existingCount?: number
 }
 
-function ImageUploader({ files, onFilesChange }: Readonly<ImageUploaderProps>) {
+function ImageUploader({
+  files,
+  onFilesChange,
+  existingCount = 0,
+}: Readonly<ImageUploaderProps>) {
   const onFileValidate = React.useCallback(
     (file: File): string | null => {
-      if (files.length >= 5) {
+      if (existingCount + files.length >= 5) {
         return 'You can only upload up to 5 files'
       }
 

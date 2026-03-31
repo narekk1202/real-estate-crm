@@ -54,10 +54,11 @@ class ContactsService {
 	}
 
 	async create(userId: string, data: NewContact) {
-		return await db
+		const [newContact] = await db
 			.insert(contacts)
 			.values({ ...data, userId })
 			.returning();
+		return newContact;
 	}
 
 	async update(userId: string, contactId: string, data: Partial<NewContact>) {

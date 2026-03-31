@@ -116,10 +116,19 @@ class PropertiesService {
 	}
 
 	async create(userId: string, data: NewProperty) {
-		return await db
+		if (data.ownerId) {
+			const [contact] = await db
+				.select({ id: contacts.id })
+				.from(contacts)
+				.where(and(eq(contacts.id, data.ownerId), eq(contacts.userId, userId)));
+			if (!contact) throw new Error('Contact not found or access denied');
+		}
+
+		const [newProperty] = await db
 			.insert(properties)
 			.values({ ...data, userId })
 			.returning();
+		return newProperty;
 	}
 
 	async getById(userId: string, propertyId: string) {
@@ -165,6 +174,14 @@ class PropertiesService {
 	}
 
 	async update(userId: string, propertyId: string, data: NewProperty) {
+		if (data.ownerId) {
+			const [contact] = await db
+				.select({ id: contacts.id })
+				.from(contacts)
+				.where(and(eq(contacts.id, data.ownerId), eq(contacts.userId, userId)));
+			if (!contact) throw new Error('Contact not found or access denied');
+		}
+
 		const [updatedProperty] = await db
 			.update(properties)
 			.set(data)
@@ -182,9 +199,14 @@ class PropertiesService {
 
 		if (!property) throw new Error('Property not found or access denied');
 
+		const [{ currentMax }] = await db
+			.select({ currentMax: sql<number>`coalesce(max(${propertyImages.order}), -1)` })
+			.from(propertyImages)
+			.where(eq(propertyImages.propertyId, propertyId));
+
 		await db
 			.insert(propertyImages)
-			.values(urls.map((url, order) => ({ propertyId, url, order })));
+			.values(urls.map((url, i) => ({ propertyId, url, order: currentMax + 1 + i })));
 	}
 
 	async deleteImage(imageId: string, userId: string) {
@@ -205,21 +227,25 @@ class PropertiesService {
 	}
 
 	async delete(userId: string, propertyId: string) {
-		const images = await db
-			.select({ url: propertyImages.url })
-			.from(propertyImages)
-			.innerJoin(properties, eq(propertyImages.propertyId, properties.id))
-			.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)));
+		const { images, deleted } = await db.transaction(async (tx) => {
+			const images = await tx
+				.select({ url: propertyImages.url })
+				.from(propertyImages)
+				.innerJoin(properties, eq(propertyImages.propertyId, properties.id))
+				.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)));
 
-		const [deleted] = await db
-			.delete(properties)
-			.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)))
-			.returning();
+			const [deleted] = await tx
+				.delete(properties)
+				.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)))
+				.returning();
 
-		if (!deleted) throw new Error('Property not found or access denied');
+			if (!deleted) throw new Error('Property not found or access denied');
+
+			return { images, deleted };
+		});
 
 		if (images.length > 0) {
-			await Promise.all(
+			await Promise.allSettled(
 				images.map(({ url }) =>
 					storageService.deleteFile(url.replace(`${env.R2_PUBLIC_URL}/`, '')),
 				),

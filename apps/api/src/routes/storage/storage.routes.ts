@@ -12,7 +12,7 @@ const routes = app.post(
 		'json',
 		z.object({
 			filename: z.string(),
-			contentType: z.string(),
+			contentType: z.enum(['image/jpeg', 'image/png', 'image/webp', 'image/gif']),
 			folder: z.string().optional().default('misc'),
 		}),
 	),

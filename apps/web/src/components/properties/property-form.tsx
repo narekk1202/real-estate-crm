@@ -236,7 +236,7 @@ function PropertyForm({
         </div>
       </div>
 
-      <ImageUploader files={files} onFilesChange={onFilesChange} />
+      <ImageUploader files={files} onFilesChange={onFilesChange} existingCount={existingImages?.length ?? 0} />
 
       {existingImages && existingImages.length > 0 && (
         <div className="grid gap-1.5">

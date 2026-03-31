@@ -7,7 +7,7 @@ export const Route = createFileRoute('/dashboard')({
     const session = await getUserSession()
     if (session.error) {
       console.error('Error fetching session:', session.error)
-      return
+      throw redirect({ to: '/login' })
     }
 
     if (!session.data) {
