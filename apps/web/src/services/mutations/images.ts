@@ -11,7 +11,15 @@ async function uploadSingle({
   folder,
 }: ImageUploadInput): Promise<string> {
   const result = await client.api.storage.presign.$post({
-    json: { filename: file.name, contentType: file.type, folder },
+    json: {
+      filename: file.name,
+      contentType: file.type as
+        | 'image/jpeg'
+        | 'image/png'
+        | 'image/webp'
+        | 'image/gif',
+      folder,
+    },
   })
   if (!result.ok) throw new Error('Failed to get presigned URL')
 
@@ -42,14 +50,16 @@ export const useImageUpload = (
       files,
       folder,
     }: MultiImageUploadInput): Promise<string[]> => {
-      const urls: string[] = []
-
-      for (const [i, file] of files.entries()) {
-        const url = await uploadSingle({ file, folder })
-        urls.push(url)
-        onProgress?.({ total: files.length, completed: i + 1, urls: [...urls] })
-      }
-
+      let completed = 0
+      const urls = await Promise.all(
+        files.map(async (file) => {
+          const url = await uploadSingle({ file, folder })
+          completed += 1
+          onProgress?.({ total: files.length, completed, urls: [] })
+          return url
+        }),
+      )
+      onProgress?.({ total: files.length, completed: files.length, urls })
       return urls
     },
     onError: (error) => {

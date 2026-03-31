@@ -188,6 +188,7 @@ class PropertiesService {
 			.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)))
 			.returning();
 
+		if (!updatedProperty) return null;
 		return updatedProperty;
 	}
 
@@ -200,13 +201,17 @@ class PropertiesService {
 		if (!property) throw new Error('Property not found or access denied');
 
 		const [{ currentMax }] = await db
-			.select({ currentMax: sql<number>`coalesce(max(${propertyImages.order}), -1)` })
+			.select({
+				currentMax: sql<number>`coalesce(max(${propertyImages.order}), -1)`,
+			})
 			.from(propertyImages)
 			.where(eq(propertyImages.propertyId, propertyId));
 
 		await db
 			.insert(propertyImages)
-			.values(urls.map((url, i) => ({ propertyId, url, order: currentMax + 1 + i })));
+			.values(
+				urls.map((url, i) => ({ propertyId, url, order: currentMax + 1 + i })),
+			);
 	}
 
 	async deleteImage(imageId: string, userId: string) {
@@ -227,16 +232,20 @@ class PropertiesService {
 	}
 
 	async delete(userId: string, propertyId: string) {
-		const { images, deleted } = await db.transaction(async (tx) => {
+		const { images, deleted } = await db.transaction(async tx => {
 			const images = await tx
 				.select({ url: propertyImages.url })
 				.from(propertyImages)
 				.innerJoin(properties, eq(propertyImages.propertyId, properties.id))
-				.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)));
+				.where(
+					and(eq(properties.id, propertyId), eq(properties.userId, userId)),
+				);
 
 			const [deleted] = await tx
 				.delete(properties)
-				.where(and(eq(properties.id, propertyId), eq(properties.userId, userId)))
+				.where(
+					and(eq(properties.id, propertyId), eq(properties.userId, userId)),
+				)
 				.returning();
 
 			if (!deleted) throw new Error('Property not found or access denied');

@@ -85,6 +85,7 @@ const routes = app
 			const data = c.req.valid('json');
 			const { id } = c.req.param();
 			const updatedProperty = await propertiesService.update(user.id, id, data);
+			if (!updatedProperty) return c.json({ error: 'Property not found' }, 404);
 			return c.json(updatedProperty);
 		} catch (error) {
 			console.error('Error updating property:', error);

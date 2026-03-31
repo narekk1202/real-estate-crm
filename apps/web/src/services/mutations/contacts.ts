@@ -14,7 +14,7 @@ export const useNewContactMutation = () => {
       return await response.json()
     },
     onSuccess: async () => {
-      Promise.all([
+      await Promise.all([
         queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONTACTS] }),
         queryClient.invalidateQueries({
           queryKey: [QUERY_KEYS.CONTACT_STATS],

@@ -1,7 +1,7 @@
 import { DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { env } from 'src/env.js';
-import { r2 } from 'src/lib/r2.js';
+import { env } from '../../env.js';
+import { r2 } from '../../lib/r2.js';
 
 class StorageService {
 	async getUploadUrl(key: string, contentType: string) {

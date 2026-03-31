@@ -33,6 +33,10 @@ export const useDeletePropertyImageMutation = () => {
       if (!response.ok) throw new Error('Failed to delete image')
       return await response.json()
     },
+    onError: (error) => {
+      console.error('Error deleting property image:', error)
+      toast.error(`Failed to delete image: ${error.message}`)
+    },
   })
 }
 

@@ -68,6 +68,7 @@ class ContactsService {
 			.where(and(eq(contacts.id, contactId), eq(contacts.userId, userId)))
 			.returning();
 
+		if (!updatedContact) return null;
 		return updatedContact;
 	}
 

@@ -49,10 +49,28 @@ export const insertPropertySchema = z.object({
 	type: z.enum(propertyTypeValues),
 	listingType: z.enum(listingTypeValues),
 	status: z.enum(propertyStatusValues),
-	price: z.coerce.number('Price must be number').min(1, 'Price is required'),
-	bedrooms: z.number().positive('Bedrooms must be positive').nullable().optional(),
-	bathrooms: z.number().int().positive('Bathrooms must be positive').nullable().optional(),
-	areaM2: z.number().int().positive('Area must be positive').nullable().optional(),
+	price: z.coerce
+		.number('Price must be number')
+		.int('Price must be a whole number')
+		.min(1, 'Price is required'),
+	bedrooms: z
+		.number()
+		.int('Bedrooms must be a whole number')
+		.positive('Bedrooms must be positive')
+		.nullable()
+		.optional(),
+	bathrooms: z
+		.number()
+		.int()
+		.positive('Bathrooms must be positive')
+		.nullable()
+		.optional(),
+	areaM2: z
+		.number()
+		.int()
+		.positive('Area must be positive')
+		.nullable()
+		.optional(),
 	ownerId: z.uuid().nullable().optional(),
 });
 

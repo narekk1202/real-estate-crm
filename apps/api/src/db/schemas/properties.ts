@@ -1,5 +1,4 @@
 import { integer, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { contacts, user } from './index.js';
 
 export const propertyType = pgEnum('property_type', [
@@ -53,6 +52,3 @@ export const properties = pgTable('properties', {
 
 export type Properties = typeof properties.$inferSelect;
 export type NewProperties = typeof properties.$inferInsert;
-
-export const insertPropertiesSchema = createInsertSchema(properties);
-export const selectPropertiesSchema = createSelectSchema(properties);

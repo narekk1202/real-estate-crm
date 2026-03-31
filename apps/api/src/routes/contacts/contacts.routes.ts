@@ -1,4 +1,8 @@
-import { contactStatusValues, contactTypeValues, insertContactSchema } from '@crm/shared';
+import {
+	contactStatusValues,
+	contactTypeValues,
+	insertContactSchema,
+} from '@crm/shared';
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import z from 'zod';
@@ -77,6 +81,7 @@ const routes = app
 			const data = c.req.valid('json');
 			const { id } = c.req.param();
 			const updatedContact = await contactsService.update(user.id, id, data);
+			if (!updatedContact) return c.json({ error: 'Contact not found' }, 404);
 			return c.json(updatedContact);
 		} catch (error) {
 			console.error('Error updating contact:', error);

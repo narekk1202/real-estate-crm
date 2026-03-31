@@ -60,8 +60,10 @@ export const useNewProperty = () => {
 
   const onSubmit = async (data: NewProperty) => {
     setIsSubmitting(true)
+    let propertyCreated = false
     try {
       const result = await newProperty.mutateAsync(data)
+      propertyCreated = true
 
       if (files.length > 0 && result?.id) {
         const urls = await imageUpload.mutateAsync({
@@ -94,7 +96,7 @@ export const useNewProperty = () => {
       resetState()
       await invalidateCache()
     } catch (error) {
-      if (newProperty.isSuccess) {
+      if (propertyCreated) {
         toast.error('Property created but something went wrong with images')
       } else {
         toast.error('Failed to create property')
